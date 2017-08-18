@@ -25,7 +25,7 @@
   <entry>
     <title><![CDATA[我的第一篇博客]]></title>
     <url>%2F2017%2F08%2F17%2Ffirstblog%2F</url>
-    <content type="text"><![CDATA[Hexo 搭建GitHub 设置 创建新的仓库 yourname.github.io yourname就是你githu的名字 安装Hexo http://www.jianshu.com/p/b8dd1e3e0255 参考地址 https://linghucong.js.org/2016/04/15/2016-04-15-hexo-github-pages-blog/]]></content>
+    <content type="text"><![CDATA[Hexo 搭建GitHub 设置 创建新的仓库 yourname.github.io yourname 就是你github的名字 安装Hexo http://www.jianshu.com/p/b8dd1e3e0255 参考地址 https://linghucong.js.org/2016/04/15/2016-04-15-hexo-github-pages-blog/]]></content>
       <categories>
         <category>Hexo</category>
       </categories>
