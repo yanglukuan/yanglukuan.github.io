@@ -8,7 +8,7 @@
     <atom:link href="/rss.xml" rel="self" type="application/rss+xml"/>
     
     <description>博闻强记</description>
-    <pubDate>Thu, 17 Aug 2017 15:00:46 GMT</pubDate>
+    <pubDate>Thu, 17 Aug 2017 09:38:09 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -46,7 +46,7 @@
       
       </description>
       
-      <content:encoded><![CDATA[<h2 id="Hexo-搭建"><a href="#Hexo-搭建" class="headerlink" title="Hexo 搭建"></a>Hexo 搭建</h2><h3 id="GitHub-设置"><a href="#GitHub-设置" class="headerlink" title="GitHub 设置"></a>GitHub 设置</h3><p>   创建新的仓库  <code>yourname.github.io</code><br>   <code>yourname</code> 就是你github的名字<br>   GitHub设置完毕</p>
+      <content:encoded><![CDATA[<h2 id="Hexo-搭建"><a href="#Hexo-搭建" class="headerlink" title="Hexo 搭建"></a>Hexo 搭建</h2><h3 id="GitHub-设置"><a href="#GitHub-设置" class="headerlink" title="GitHub 设置"></a>GitHub 设置</h3><p>   创建新的仓库  <code>yourname.github.io</code><br>   <code>yourname</code> 就是你github的名字  </p>
 <h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>   <a href="http://www.jianshu.com/p/b8dd1e3e0255" target="_blank" rel="external">http://www.jianshu.com/p/b8dd1e3e0255</a></p>
 <hr>
 <h3 id="参考地址"><a href="#参考地址" class="headerlink" title="参考地址"></a>参考地址</h3><p>   <a href="https://linghucong.js.org/2016/04/15/2016-04-15-hexo-github-pages-blog/" target="_blank" rel="external">https://linghucong.js.org/2016/04/15/2016-04-15-hexo-github-pages-blog/</a></p>
