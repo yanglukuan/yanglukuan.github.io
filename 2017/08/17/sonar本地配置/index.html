@@ -104,7 +104,7 @@
 <meta property="og:site_name" content="yanglukuan">
 <meta property="og:description" content="SonarQube是神马   1.SonarQube（又叫Sonar）是对代码进行静态检测的开源平台,利用这个工具可以发现我们代码里各种隐藏的Bug和潜在的问     题，在团队协作的开发模式中可以更好的控制代码质量。   2.支持多种平台（Windows、Linux）和多种开发语言(java、C#、JavaScript、PHP等),并可以和Jekins、JIRA等多种外部工具和IntelliJ">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-20T13:59:09.457Z">
+<meta property="og:updated_time" content="2017-08-20T14:15:02.273Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SonarQube 服务搭建与配置">
 <meta name="twitter:description" content="SonarQube是神马   1.SonarQube（又叫Sonar）是对代码进行静态检测的开源平台,利用这个工具可以发现我们代码里各种隐藏的Bug和潜在的问     题，在团队协作的开发模式中可以更好的控制代码质量。   2.支持多种平台（Windows、Linux）和多种开发语言(java、C#、JavaScript、PHP等),并可以和Jekins、JIRA等多种外部工具和IntelliJ">
@@ -375,7 +375,8 @@
 
       
         <h2 id="SonarQube是神马"><a href="#SonarQube是神马" class="headerlink" title="SonarQube是神马"></a>SonarQube是神马</h2><p>   1.SonarQube（又叫Sonar）是对代码进行静态检测的开源平台,利用这个工具可以发现我们代码里各种隐藏的Bug和潜在的问     题，在团队协作的开发模式中可以更好的控制代码质量。<br>   2.支持多种平台（Windows、Linux）和多种开发语言(java、C#、JavaScript、PHP等),并可以和Jekins、JIRA等多种外部工具和IntelliJ IDEA等开发工具无缝集成。<br>   3.可视化界面，提供各种维度的质量查询和分析。</p>
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><h3 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1.准备工作"></a><strong>1.准备工作</strong></h3><ul>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>  <strong>1.准备工作</strong></p>
+<ul>
 <li>下载软件<br>SonarQube <a href="https://www.sonarqube.org/downloads/" target="_blank" rel="external">https://www.sonarqube.org/downloads/</a><br>规则插件 checkstyle  <a href="https://github.com/checkstyle/sonar-checkstyle" target="_blank" rel="external">https://github.com/checkstyle/sonar-checkstyle</a><br>pmd <a href="https://github.com/SonarQubeCommunity/sonar-pmd" target="_blank" rel="external">https://github.com/SonarQubeCommunity/sonar-pmd</a><br>findbugs <a href="https://github.com/SonarQubeCommunity/sonar-findbugs" target="_blank" rel="external">https://github.com/SonarQubeCommunity/sonar-findbugs</a><br>汉化插件 sonar-l10n-zh-master <a href="https://github.com/SonarQubeCommunity/sonar-l10n-zh" target="_blank" rel="external">https://github.com/SonarQubeCommunity/sonar-l10n-zh</a><br>本地扫描插件 sonar-runner-dist-2.4 <a href="http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/" target="_blank" rel="external">http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/</a><br><strong>以上插件均是源码 需要下载后自行编译</strong></li>
 <li>所需环境<br>JDK1.7或以上<br>Maven<br>Mysql</li>
 <li><p>配置<br>a.sonarqube 配置<br>sonar.properties内容</p>
@@ -390,9 +391,10 @@
 </ul>
 </li>
 <li>插件编译 安装<br>分别编译下载的插件,去掉snapshort标记,放入插件目录下sonarqube-6.4\extensions\plugins</li>
-<li>启动<br>至此,启动mysql,启动sonarqube,本地访问 <code>http://localhost:9000/</code><br>可看到管理界面<br>登录名\密码   admin\admin  </li>
+<li>启动<br>至此,启动mysql,启动sonarqube,本地访问 <code>http://localhost:9000/</code><br>可看到管理界面<br>登录名\密码   admin\admin</li>
 </ul>
-<h3 id="2-扫描配置"><a href="#2-扫描配置" class="headerlink" title="2.扫描配置"></a><strong>2.扫描配置</strong></h3><ul>
+<p>  <strong>2.扫描配置</strong></p>
+<ul>
 <li><p>maven扫描 配置<br>maven配置文件添加节点</p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">id</span>&gt;</span>sonar<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">     <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.url</span>&gt;</span></div><div class="line">&lt;![CDATA[jdbc:mysql://127.0.0.1:3306/sonar]]&gt;</div><div class="line">      <span class="tag">&lt;/<span class="name">sonar.jdbc.url</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.driver</span>&gt;</span>com.mysql.jdbc.Driver<span class="tag">&lt;/<span class="name">sonar.jdbc.driver</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.username</span>&gt;</span>sonar<span class="tag">&lt;/<span class="name">sonar.jdbc.username</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.password</span>&gt;</span>sonar<span class="tag">&lt;/<span class="name">sonar.jdbc.password</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">sonar.jdbc.maxWait</span>&gt;</span>50000<span class="tag">&lt;/<span class="name">sonar.jdbc.maxWait</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">sonar.jdbc.minEvictableIdleTimeMillis</span>&gt;</span>600000<span class="tag">&lt;/<span class="name">sonar.jdbc.minEvictableIdleTimeMillis</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.timeBetweenEvictionRunsMillis</span>&gt;</span>30000<span class="tag">&lt;/<span class="name">sonar.jdbc.timeBetweenEvictionRunsMillis</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.host.url</span>&gt;</span>http://localhost:9000<span class="tag">&lt;/<span class="name">sonar.host.url</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div></pre></td></tr></table></figure>
 <p>执行maven命令<code>`mvn sonar:sonar</code> 可扫描项目并上传质量报告</p>
@@ -603,7 +605,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SonarQube是神马"><span class="nav-number">1.</span> <span class="nav-text">SonarQube是神马</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用"><span class="nav-number">2.</span> <span class="nav-text">如何使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-准备工作"><span class="nav-number">2.1.</span> <span class="nav-text">1.准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-扫描配置"><span class="nav-number">2.2.</span> <span class="nav-text">2.扫描配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SonarQube是神马"><span class="nav-number">1.</span> <span class="nav-text">SonarQube是神马</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用"><span class="nav-number">2.</span> <span class="nav-text">如何使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
