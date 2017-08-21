@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="SonarQube," />
+
+
+
+
+
+  <link rel="alternate" href="/rss.xml" title="yanglukuan" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="SonarQube是神马   1.SonarQube（又叫Sonar）是对代码进行静态检测的开源平台,利用这个工具可以发现我们代码里各种隐藏的Bug和潜在的问     题，在团队协作的开发模式中可以更好的控制代码质量。   2.支持多种平台（Windows、Linux）和多种开发语言(java、C#、JavaScript、PHP等),并可以和Jekins、JIRA等多种外部工具和IntelliJ">
+<meta name="keywords" content="SonarQube">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SonarQube 服务搭建与配置">
+<meta property="og:url" content="http://yoursite.com/2017/08/20/sonar本地配置/index.html">
+<meta property="og:site_name" content="yanglukuan">
+<meta property="og:description" content="SonarQube是神马   1.SonarQube（又叫Sonar）是对代码进行静态检测的开源平台,利用这个工具可以发现我们代码里各种隐藏的Bug和潜在的问     题，在团队协作的开发模式中可以更好的控制代码质量。   2.支持多种平台（Windows、Linux）和多种开发语言(java、C#、JavaScript、PHP等),并可以和Jekins、JIRA等多种外部工具和IntelliJ">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-21T09:39:45.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SonarQube 服务搭建与配置">
+<meta name="twitter:description" content="SonarQube是神马   1.SonarQube（又叫Sonar）是对代码进行静态检测的开源平台,利用这个工具可以发现我们代码里各种隐藏的Bug和潜在的问     题，在团队协作的开发模式中可以更好的控制代码质量。   2.支持多种平台（Windows、Linux）和多种开发语言(java、C#、JavaScript、PHP等),并可以和Jekins、JIRA等多种外部工具和IntelliJ">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/20/sonar本地配置/"/>
+
+
+
+
+
+  <title>SonarQube 服务搭建与配置 | yanglukuan</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yanglukuan</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/20/sonar本地配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yanglukuan">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/12642715.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yanglukuan">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SonarQube 服务搭建与配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-20T15:07:49+08:00">
+                2017-08-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/代码质量/" itemprop="url" rel="index">
+                    <span itemprop="name">代码质量</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="SonarQube是神马"><a href="#SonarQube是神马" class="headerlink" title="SonarQube是神马"></a>SonarQube是神马</h2><p>   1.<code>SonarQube（又叫Sonar）</code>是对代码进行静态检测的开源平台,利用这个工具可以发现我们代码里各种隐藏的Bug和潜在的问     题，在团队协作的开发模式中可以更好的控制代码质量。<br>   2.支持多种平台<code>（Windows、Linux）</code>和多种开发语言<code>(java、C#、JavaScript、PHP等)</code>,并可以和<code>Jekins、JIRA</code>等多种外部工具和<code>IntelliJ IDEA</code>等开发工具无缝集成。<br>   3.可视化界面，提供各种维度的质量查询和分析。</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><h3 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a><strong>准备工作</strong></h3><ul>
+<li>下载软件<br><code>SonarQube</code> <a href="https://www.sonarqube.org/downloads/" target="_blank" rel="external">https://www.sonarqube.org/downloads/</a><br>规则插件 <code>checkstyle</code>  <a href="https://github.com/checkstyle/sonar-checkstyle" target="_blank" rel="external">https://github.com/checkstyle/sonar-checkstyle</a><br><code>pmd</code> <a href="https://github.com/SonarQubeCommunity/sonar-pmd" target="_blank" rel="external">https://github.com/SonarQubeCommunity/sonar-pmd</a><br><code>findbugs</code> <a href="https://github.com/SonarQubeCommunity/sonar-findbugs" target="_blank" rel="external">https://github.com/SonarQubeCommunity/sonar-findbugs</a><br>汉化插件 <code>sonar-l10n-zh-master</code> <a href="https://github.com/SonarQubeCommunity/sonar-l10n-zh" target="_blank" rel="external">https://github.com/SonarQubeCommunity/sonar-l10n-zh</a><br>本地扫描插件 <code>sonar-runner-dist-2.4</code> <a href="http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/" target="_blank" rel="external">http://repo1.maven.org/maven2/org/codehaus/sonar/runner/sonar-runner-dist/2.4/</a><br><strong>以上插件均是源码 需要下载后自行编译</strong></li>
+<li>所需环境<br><code>JDK1.7</code>或以上<br><code>Maven</code><br><code>Mysql</code></li>
+<li><p>配置<br>a.<code>sonarqube\conf</code> 配置<br><code>sonar.properties</code>内容</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sonar.jdbc.username=sonar</div><div class="line">sonar.jdbc.password=sonar</div><div class="line">sonar.jdbc.url=jdbc:mysql://127.0.0.1:3306/sonar?useUnicode=true&amp;characterEncoding=utf8&amp;rewriteBatchedStatements=true&amp;useConfigs=maxPerformance</div></pre></td></tr></table></figure>
+<p>b.mysql 配置</p>
+<ul>
+<li><p>在mysql管理器中执行如下脚本创建数据库及mysql用户  </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">DATABASE</span> sonar <span class="built_in">CHARACTER</span> <span class="keyword">SET</span> utf8 <span class="keyword">COLLATE</span> utf8_general_ci;  </div><div class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">'sonar'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</div><div class="line"><span class="keyword">GRANT</span> ALL <span class="keyword">ON</span> sonar.* <span class="keyword">TO</span> <span class="string">'sonar'</span>@<span class="string">'%'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</div><div class="line"><span class="keyword">GRANT</span> ALL <span class="keyword">ON</span> sonar.* <span class="keyword">TO</span> <span class="string">'sonar'</span>@<span class="string">'localhost'</span> <span class="keyword">IDENTIFIED</span> <span class="keyword">BY</span> <span class="string">'sonar'</span>;</div><div class="line"><span class="keyword">FLUSH</span> <span class="keyword">PRIVILEGES</span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>mysql max_allowed_packet</code>配置<br>路径 <code>C:\ProgramData\MySQL\MySQL Server 5.6\my.ini</code><br>设置 <code>max_allowed_packet=101943040</code></p>
+</li>
+</ul>
+</li>
+<li>插件编译 安装<br>分别编译下载的插件,去掉<code>snapshort</code>标记,放入插件目录下<code>sonarqube-6.4\extensions\plugins</code></li>
+<li>启动<br>至此,启动mysql,启动<code>sonarqube</code>,本地访问 <code>http://localhost:9000/</code><br>可看到管理界面<br>登录名\密码   <code>admin\admin</code></li>
+</ul>
+<h3 id="扫描配置"><a href="#扫描配置" class="headerlink" title="扫描配置"></a><strong>扫描配置</strong></h3><ul>
+<li><p><code>maven</code>扫描 配置<br><code>maven</code>配置文件添加节点</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">profile</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">id</span>&gt;</span>sonar<span class="tag">&lt;/<span class="name">id</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">activation</span>&gt;</span></div><div class="line">     <span class="tag">&lt;<span class="name">activeByDefault</span>&gt;</span>true<span class="tag">&lt;/<span class="name">activeByDefault</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">activation</span>&gt;</span></div><div class="line"> <span class="tag">&lt;<span class="name">properties</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.url</span>&gt;</span></div><div class="line">&lt;![CDATA[jdbc:mysql://127.0.0.1:3306/sonar]]&gt;</div><div class="line">      <span class="tag">&lt;/<span class="name">sonar.jdbc.url</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.driver</span>&gt;</span>com.mysql.jdbc.Driver<span class="tag">&lt;/<span class="name">sonar.jdbc.driver</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.username</span>&gt;</span>sonar<span class="tag">&lt;/<span class="name">sonar.jdbc.username</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.password</span>&gt;</span>sonar<span class="tag">&lt;/<span class="name">sonar.jdbc.password</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">sonar.jdbc.maxWait</span>&gt;</span>50000<span class="tag">&lt;/<span class="name">sonar.jdbc.maxWait</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">sonar.jdbc.minEvictableIdleTimeMillis</span>&gt;</span>600000<span class="tag">&lt;/<span class="name">sonar.jdbc.minEvictableIdleTimeMillis</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.jdbc.timeBetweenEvictionRunsMillis</span>&gt;</span>30000<span class="tag">&lt;/<span class="name">sonar.jdbc.timeBetweenEvictionRunsMillis</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">sonar.host.url</span>&gt;</span>http://localhost:9000<span class="tag">&lt;/<span class="name">sonar.host.url</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">properties</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">profile</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>执行maven命令<code>mvn sonar:sonar</code> 可扫描项目并上传质量报告</p>
+</li>
+<li><p><code>sonar-runner</code> 扫描配置<br>a.环境变量配置<br>系统环境变量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">SONAR_RUNNER_HOME  D:\Java\sonar-runner-2.4</div><div class="line">Path 追加 ;%SONAR_RUNNER_HOME%\bin;</div></pre></td></tr></table></figure>
+<p>b.sonar-runner.properties配置文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">#Configure here general information about the environment, such as SonarQube DB details for example</div><div class="line">#No information about specific project should appear here</div><div class="line">  </div><div class="line">#----- Default SonarQube server</div><div class="line">sonar.host.url=http://localhost:9000</div><div class="line">  </div><div class="line">#----- PostgreSQL</div><div class="line">#sonar.jdbc.url=jdbc:postgresql://localhost/sonar</div><div class="line">  </div><div class="line">#----- MySQL</div><div class="line">sonar.jdbc.url=jdbc:mysql://127.0.0.1:3306/sonar?useUnicode=true&amp;amp;characterEncoding=utf8</div><div class="line">  </div><div class="line">#----- Oracle</div><div class="line">#sonar.jdbc.url=jdbc:oracle:thin:@localhost/XE</div><div class="line">  </div><div class="line">#----- Microsoft SQLServer</div><div class="line">#sonar.jdbc.url=jdbc:jtds:sqlserver://localhost/sonar;SelectMethod=Cursor</div><div class="line">  </div><div class="line">#----- Global database settings</div><div class="line">sonar.jdbc.username=sonar</div><div class="line">sonar.jdbc.password=sonar</div><div class="line">  </div><div class="line">#----- Default source code encoding</div><div class="line">sonar.sourceEncoding=UTF-8</div><div class="line">  </div><div class="line">#----- Security (when 'sonar.forceAuthentication' is set to 'true')</div><div class="line">sonar.login=admin</div><div class="line">sonar.password=admin</div></pre></td></tr></table></figure>
+<p>c、本地项目配置文件  项目根目录<br>sonar-project.properties配置文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">sonar.projectKey=projectKey </div><div class="line">sonar.projectName=projectName</div><div class="line">sonar.projectVersion=1.0</div><div class="line"># Set modules IDs</div><div class="line">sonar.modules=projectmodules</div><div class="line"></div><div class="line"># Modules inherit properties set at parent level</div><div class="line">sonar.sources=src</div><div class="line">sonar.sourceEncoding=UTF-8</div><div class="line">sonar.language=java</div><div class="line">sonar.java.binaries=target</div><div class="line"># By default, the base directory for a module is <span class="tag">&lt;<span class="name">current_dir</span>&gt;</span>/<span class="tag">&lt;<span class="name">module_ID</span>&gt;</span>.</div></pre></td></tr></table></figure>
+<p>至此  使用命令行进入到项目根目录<br>输入命令 <code>sonar-runner</code> 可以完成项目的扫描和上传报告  </p>
+</li>
+</ul>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://zhuanlan.zhihu.com/p/22926742" target="_blank" rel="external">https://zhuanlan.zhihu.com/p/22926742</a><br><a href="http://blog.csdn.net/xiajian2010/article/details/22983825" target="_blank" rel="external">http://blog.csdn.net/xiajian2010/article/details/22983825</a><br><a href="http://www.cnblogs.com/parryyang/p/6270402.html" target="_blank" rel="external">http://www.cnblogs.com/parryyang/p/6270402.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SonarQube/" rel="tag"># SonarQube</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/17/firstblog/" rel="next" title="Hexo+GitHub Pages博客搭建">
+                <i class="fa fa-chevron-left"></i> Hexo+GitHub Pages博客搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/21/git多账号配置/" rel="prev" title="git多账号配置（Windows平台）">
+                git多账号配置（Windows平台） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/12642715.jpg"
+               alt="yanglukuan" />
+          <p class="site-author-name" itemprop="name">yanglukuan</p>
+           
+              <p class="site-description motion-element" itemprop="description">博闻强记</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/rss.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yanglukuan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SonarQube是神马"><span class="nav-number">1.</span> <span class="nav-text">SonarQube是神马</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用"><span class="nav-number">2.</span> <span class="nav-text">如何使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#准备工作"><span class="nav-number">2.1.</span> <span class="nav-text">准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#扫描配置"><span class="nav-number">2.2.</span> <span class="nav-text">扫描配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yanglukuan</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
