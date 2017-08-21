@@ -96,18 +96,18 @@
 
 
 
-<meta name="description" content="博闻强记">
+<meta name="description" content="Git的配置相信大家都不陌生了，如果还不熟悉，不要着急，继续往下看就好了。今天主要看一下多账户的场景，顺便也复习一下Git的配置流程。    什么情况下需要多账户的配置呢？1.在公司一般大家都会配置公司的代码仓库的账户，用的账号一般是公司企业邮箱账号,比如zhangsan@XXX.com,一般的配置流程都是企业入职的时候给一个配置清单或者新手指导，员工自己按照指导去配置，无非也就是用git的SSH">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="git多账号配置">
+<meta property="og:title" content="git多账号配置（Windows平台）">
 <meta property="og:url" content="http://yoursite.com/2017/08/17/git多账号配置/index.html">
 <meta property="og:site_name" content="yanglukuan">
-<meta property="og:description" content="博闻强记">
+<meta property="og:description" content="Git的配置相信大家都不陌生了，如果还不熟悉，不要着急，继续往下看就好了。今天主要看一下多账户的场景，顺便也复习一下Git的配置流程。    什么情况下需要多账户的配置呢？1.在公司一般大家都会配置公司的代码仓库的账户，用的账号一般是公司企业邮箱账号,比如zhangsan@XXX.com,一般的配置流程都是企业入职的时候给一个配置清单或者新手指导，员工自己按照指导去配置，无非也就是用git的SSH">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-17T09:38:09.487Z">
+<meta property="og:updated_time" content="2017-08-21T06:53:54.565Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="git多账号配置">
-<meta name="twitter:description" content="博闻强记">
+<meta name="twitter:title" content="git多账号配置（Windows平台）">
+<meta name="twitter:description" content="Git的配置相信大家都不陌生了，如果还不熟悉，不要着急，继续往下看就好了。今天主要看一下多账户的场景，顺便也复习一下Git的配置流程。    什么情况下需要多账户的配置呢？1.在公司一般大家都会配置公司的代码仓库的账户，用的账号一般是公司企业邮箱账号,比如zhangsan@XXX.com,一般的配置流程都是企业入职的时候给一个配置清单或者新手指导，员工自己按照指导去配置，无非也就是用git的SSH">
 
 
 
@@ -142,7 +142,7 @@
 
 
 
-  <title>git多账号配置 | yanglukuan</title>
+  <title>git多账号配置（Windows平台） | yanglukuan</title>
   
 
 
@@ -302,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">git多账号配置</h1>
+          <h1 class="post-title" itemprop="name headline">git多账号配置（Windows平台）</h1>
         
 
         <div class="post-meta">
@@ -374,7 +374,20 @@
       
 
       
-        
+        <p>Git的配置相信大家都不陌生了，如果还不熟悉，不要着急，继续往下看就好了。今天主要看一下多账户的场景，顺便也复习一下Git的配置流程。  </p>
+<hr>
+<h2 id="什么情况下需要多账户的配置呢？"><a href="#什么情况下需要多账户的配置呢？" class="headerlink" title="什么情况下需要多账户的配置呢？"></a>什么情况下需要多账户的配置呢？</h2><p>1.在公司一般大家都会配置公司的代码仓库的账户，用的账号一般是公司企业邮箱账号,比如<code>zhangsan@XXX.com</code>,一般的配置流程都是企业入职的时候给一个配置清单或者新手指导，员工自己按照指导去配置，无非也就是用git的SSH 命令生成密钥对，然后将公钥上传至管理平台，就可以很开心的写Bug了，哦 不对，写码。<br>但是某一天有这样一个场景，有时候自己也会写点代码，这些代码一般我们托管在GitHub等平台上，这个时候就无法使用公司的账号了，需要再配置一个GitHub的账号，比如<code>zhangsan@Gmail.com</code>这样的账户名字。<br>2.由于天朝独特的网络环境,你们懂得，有时候GitHub无法连接或者不稳定，这个时候需要有一个国内的代码托管平台，国内比如码云这样的平台也可以托管代码，速度比较稳定。这个时候就需要同时配置GitHub和码云两个账户。</p>
+<h2 id="具体配置"><a href="#具体配置" class="headerlink" title="具体配置"></a>具体配置</h2><h3 id="第一种情况"><a href="#第一种情况" class="headerlink" title="第一种情况"></a>第一种情况</h3><blockquote>
+<p>公司账户和GitHub账户（不同邮箱）</p>
+</blockquote>
+<p>1.如果原来配置过一次，在用户目录下会有一个.ssh目录，里面存放着你默认第一次生成的秘钥对，<code>id_rsa</code>和<code>id_rsa.pub</code>,在此目录打开<code>Git bash</code> 输入命令 <code>ssh-keygen -C &quot;zhangsan@Gmail.com&quot; -t rsa</code> 然后回车 这个时候需要注意，需要给生成的秘钥对命名，比如<code>id_rsa_github</code>，不然会以默认的名字<code>id_rsa</code>生成，从而覆盖掉原来生成的。然后回车两次，就可以成功生成秘钥。<br>2.生成秘钥成功后，把生成公钥上传到GitHub的秘钥管理平台上，然后最重要的步骤来了。<br>回到用户目录的.ssh目录，创建一个config文本文件，注意这个文件名字为config，没有后缀名，尝试过加上.config后缀，貌似不会被识别。这个配置文件就是告诉ssh多个账户下，每个账户对应的秘钥位置和Host位置。<br>config配置文件<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># github </div><div class="line">Host github.com</div><div class="line">HostName github.com</div><div class="line">User zhangsan</div><div class="line">IdentityFile ~/.ssh/id_rsa_github</div><div class="line"></div><div class="line"># company</div><div class="line">Host code.company.com</div><div class="line">HostName code.company.com</div><div class="line">User zhangsan</div><div class="line">IdentityFile ~/.ssh/id_rsa</div></pre></td></tr></table></figure></p>
+<p>这样配置就结束了，打开<code>git bash</code> 输入命令测试一下<br><code>ssh -T git@github.com</code><br>成功的话会收到这样一段回复<br><code>Hi zhangsan! You&#39;ve successfully authenticated, but GitHub does not provide shell access.</code><br>不成功的话，检查下上面的配置，或者使用<code>ssh -vT git@github.com</code>  查看下详细的错误信息。<br>3.有些网友的帖子会说如果配置了全局的Git用户名和邮箱，需要去掉，其实不去掉也是可以的。如果你先设置了公司的账户为全局配置，那么你克隆GitHub上的代码到本地后，只要在那个目录设置本地的用户名和邮箱，就可以了，因为本地的优先级要大于全局的设定，公司的代码目录则继续使用全局配置，一样的互不影响。</p>
+<h3 id="第二种情况"><a href="#第二种情况" class="headerlink" title="第二种情况"></a>第二种情况</h3><blockquote>
+<p>GitHub和码云两个账号</p>
+</blockquote>
+<p>1.不同邮箱<br>如果你同时拥有GitHub和码云两个账号，而又不是使用同一邮箱注册，其实也类似于上面这张情况，分别生成不同邮箱的秘钥，然后再<code>config</code>文件里配置相应的用户、秘钥位置和<code>Host</code>就可以了。<br>2.相同邮箱<br>如果是相同的邮箱，就不需要上面的配置，只要用这个邮箱生成一次秘钥，这个秘钥可以同时用在两个网站上，两个远程仓库都可以提交，因为<code>SSH</code>秘钥是用邮箱生成的，邮箱相同，则秘钥也相同，所以可以共用一个。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/89cb26e5c3e8" target="_blank" rel="external">http://www.jianshu.com/p/89cb26e5c3e8</a><br><a href="https://gist.github.com/suziewong/4378434" target="_blank" rel="external">https://gist.github.com/suziewong/4378434</a><br><a href="http://noahsnail.com/2016/08/31/2016-9-1-Git%E5%A4%9A%E7%94%A8%E6%88%B7%E9%85%8D%E7%BD%AE/" target="_blank" rel="external">http://noahsnail.com/2016/08/31/2016-9-1-Git%E5%A4%9A%E7%94%A8%E6%88%B7%E9%85%8D%E7%BD%AE/</a><br><a href="https://steflerjiang.github.io/2016/12/16/git%E5%A4%9A%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE/" target="_blank" rel="external">https://steflerjiang.github.io/2016/12/16/git%E5%A4%9A%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE/</a></p>
+
       
     </div>
     
@@ -404,8 +417,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/17/sonar本地配置/" rel="next" title="sonar本地配置">
-                <i class="fa fa-chevron-left"></i> sonar本地配置
+              <a href="/2017/08/17/sonar本地配置/" rel="next" title="SonarQube 服务搭建与配置">
+                <i class="fa fa-chevron-left"></i> SonarQube 服务搭建与配置
               </a>
             
           </div>
@@ -464,8 +477,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/12642715.jpg"
@@ -491,7 +513,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -502,7 +524,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -547,6 +569,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么情况下需要多账户的配置呢？"><span class="nav-number">1.</span> <span class="nav-text">什么情况下需要多账户的配置呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体配置"><span class="nav-number">2.</span> <span class="nav-text">具体配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一种情况"><span class="nav-number">2.1.</span> <span class="nav-text">第一种情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二种情况"><span class="nav-number">2.2.</span> <span class="nav-text">第二种情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
