@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo," />
+  <meta name="keywords" content="git," />
 
 
 
@@ -96,18 +96,18 @@
 
 
 
-<meta name="description" content="闲扯一会由于要学习Java,最近读了不少书和博客,但是读下来发现了一些问题。比如，有些知识点看过很多次，每次看的时候都觉得似曾相识，却又记不起全貌。有些则是过目就忘，合上书本完全不记得书中所讲精要，甚是苦闷。这几日忽得夫人点拨，说是输出倒逼输出，意思就是充当别人的老师，然后逼自己学习更多的知识。这个道理大家自然都是懂得，只不过有时候做起来比较难以实践。一个是因为人都有惰性，好多事情都是停留在思想和">
-<meta name="keywords" content="Hexo">
+<meta name="description" content="Git的配置相信大家都不陌生了，如果还不熟悉，不要着急，继续往下看就好了。今天主要看一下多账户的场景，顺便也复习一下Git的配置流程。    什么情况下需要多账户的配置呢？1.在公司一般大家都会配置公司的代码仓库的账户，用的账号一般是公司企业邮箱账号,比如zhangsan@XXX.com,一般的配置流程都是企业入职的时候给一个配置清单或者新手指导，员工自己按照指导去配置，无非也就是用git的SSH">
+<meta name="keywords" content="git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hexo+GitHub Pages博客搭建">
-<meta property="og:url" content="http://yoursite.com/2017/08/17/firstblog/index.html">
+<meta property="og:title" content="git多账号配置（Windows平台）">
+<meta property="og:url" content="http://yoursite.com/2017/08/21/git多账号配置/index.html">
 <meta property="og:site_name" content="kevin.yang">
-<meta property="og:description" content="闲扯一会由于要学习Java,最近读了不少书和博客,但是读下来发现了一些问题。比如，有些知识点看过很多次，每次看的时候都觉得似曾相识，却又记不起全貌。有些则是过目就忘，合上书本完全不记得书中所讲精要，甚是苦闷。这几日忽得夫人点拨，说是输出倒逼输出，意思就是充当别人的老师，然后逼自己学习更多的知识。这个道理大家自然都是懂得，只不过有时候做起来比较难以实践。一个是因为人都有惰性，好多事情都是停留在思想和">
+<meta property="og:description" content="Git的配置相信大家都不陌生了，如果还不熟悉，不要着急，继续往下看就好了。今天主要看一下多账户的场景，顺便也复习一下Git的配置流程。    什么情况下需要多账户的配置呢？1.在公司一般大家都会配置公司的代码仓库的账户，用的账号一般是公司企业邮箱账号,比如zhangsan@XXX.com,一般的配置流程都是企业入职的时候给一个配置清单或者新手指导，员工自己按照指导去配置，无非也就是用git的SSH">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-08-21T14:55:06.528Z">
+<meta property="og:updated_time" content="2017-08-21T14:55:06.533Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo+GitHub Pages博客搭建">
-<meta name="twitter:description" content="闲扯一会由于要学习Java,最近读了不少书和博客,但是读下来发现了一些问题。比如，有些知识点看过很多次，每次看的时候都觉得似曾相识，却又记不起全貌。有些则是过目就忘，合上书本完全不记得书中所讲精要，甚是苦闷。这几日忽得夫人点拨，说是输出倒逼输出，意思就是充当别人的老师，然后逼自己学习更多的知识。这个道理大家自然都是懂得，只不过有时候做起来比较难以实践。一个是因为人都有惰性，好多事情都是停留在思想和">
+<meta name="twitter:title" content="git多账号配置（Windows平台）">
+<meta name="twitter:description" content="Git的配置相信大家都不陌生了，如果还不熟悉，不要着急，继续往下看就好了。今天主要看一下多账户的场景，顺便也复习一下Git的配置流程。    什么情况下需要多账户的配置呢？1.在公司一般大家都会配置公司的代码仓库的账户，用的账号一般是公司企业邮箱账号,比如zhangsan@XXX.com,一般的配置流程都是企业入职的时候给一个配置清单或者新手指导，员工自己按照指导去配置，无非也就是用git的SSH">
 
 
 
@@ -136,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/08/17/firstblog/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/08/21/git多账号配置/"/>
 
 
 
 
 
-  <title>Hexo+GitHub Pages博客搭建 | kevin.yang</title>
+  <title>git多账号配置（Windows平台） | kevin.yang</title>
   
 
 
@@ -285,7 +285,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/17/firstblog/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/21/git多账号配置/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="kevin.yang">
@@ -302,7 +302,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Hexo+GitHub Pages博客搭建</h1>
+          <h1 class="post-title" itemprop="name headline">git多账号配置（Windows平台）</h1>
         
 
         <div class="post-meta">
@@ -314,8 +314,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-17T14:56:25+08:00">
-                2017-08-17
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-21T14:10:22+08:00">
+                2017-08-21
               </time>
             
 
@@ -337,8 +337,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo/" itemprop="url" rel="index">
-                    <span itemprop="name">Hexo</span>
+                  <a href="/categories/git/" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
                   </a>
                 </span>
 
@@ -374,16 +374,19 @@
       
 
       
-        <h2 id="闲扯一会"><a href="#闲扯一会" class="headerlink" title="闲扯一会"></a>闲扯一会</h2><p>由于要学习Java,最近读了不少书和博客,但是读下来发现了一些问题。比如，有些知识点看过很多次，每次看的时候都觉得似曾相识，却又记不起全貌。有些则是过目就忘，合上书本完全不记得书中所讲精要，甚是苦闷。这几日忽得夫人点拨，说是输出倒逼输出，意思就是充当别人的老师，然后逼自己学习更多的知识。这个道理大家自然都是懂得，只不过有时候做起来比较难以实践。一个是因为人都有惰性，好多事情都是停留在思想和嘴巴，付诸行动的少之又少。再者，也不太容易有机会充当别人的老师，而且本身我自己也不是那种好为人师的性格，倒不是清高装逼，也是怕误人子弟。<br>不过我们这个行业比较特殊，可以有很好的方式去做输出倒逼输入的事情，比如写博客。其实很早就注册了博客园，但是到现在也只是酱油和灌水，没有发过帖子。现在决定写博客，把自己的输入真正变成自己的东西，一方面在写的过程中梳理一下知识，另一方面也记录下自己解决过的问题、踩过的坑。博客前期打算以Step By Step的教程为主，主要为了熟悉markdown语法和Hexo博客的使用，后面会慢慢转向原理解析类和日常踩坑记录类。<br><strong>往者不可谏,来者犹可追。</strong></p>
+        <p>Git的配置相信大家都不陌生了，如果还不熟悉，不要着急，继续往下看就好了。今天主要看一下多账户的场景，顺便也复习一下Git的配置流程。  </p>
 <hr>
-<h2 id="博客搭建"><a href="#博客搭建" class="headerlink" title="博客搭建"></a>博客搭建</h2><h3 id="GitHub-Pages-设置"><a href="#GitHub-Pages-设置" class="headerlink" title="GitHub Pages 设置"></a>GitHub Pages 设置</h3><p>   Github Pages 是 Github 公司提供的免费的静态网站托管服务，用起来方便而且功能强大，不仅没有空间限制，还可以绑定自己的域名。在 <a href="https://pages.github.com/" target="_blank" rel="external">https://pages.github.com/</a> 首页上可以看到很多用 Github Pages 托管的网站，很漂亮。另外很多非常著名的公司和项目也都用这种方式来搭建网站，如微软和 twitter 的网站，还有 谷歌的 Material Design 图标 网站。本博客就是利用Github Pages托管所建。开始创建自己的网站：<br>   创建一个新的仓库  <code>yourname.github.io</code>，<code>yourname</code> 就是你github的用户名，不可以是其他字符，不然访问不到。<br>   只要把静态的网站文件上传到这个仓库，然后访问<code>https://yourname.github.io</code>，就可以看到自己的网站了。</p>
-<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>   Hexo出自台湾大学生tommy351之手，是一个基于Node.js的静态博客程序，其编译上百篇文字只需要几秒。hexo生成的静态网页可以直接放到GitHub Pages，BAE，SAE等平台上。<br>   所需环境<br>   Nodejs<br>   Git</p>
-<p>1.首先安装好Nodejs和Git,Hexo安装过程中，有些文件是通过Git下载下来。<br>安装cnpm 由于天朝网路环境问题，所以最好安装cnpm 淘宝的镜像，下载比较快<br><code>npm install -g cnpm --registry=https://registry.npm.taobao.org</code><br>全局安装hexo<br><code>cnpm install hexo-cli -g</code><br>新建一个hexo/blog文件夹<br>进入到你的hexo/blog目录<br>打开git bash<br><code>cnpm install hexo --save</code><br>检查是否安装成功<br><code>hexo -v</code><br>初始化Hexo<br><code>hexo init</code><br>这里会创建一些文件<br>然后输入<br><code>cnpm install</code><br>这里要等一会，安装组件</p>
-<p>2.然后就可以使用了<br>常用命令<br><code>hexo new &quot;Hello World&quot;</code> 创建新页面<br><code>hexo generate</code> 重新生成所有页面<br><code>hexo server</code> 启动本地预览  预览地址 <code>http://localhost:4000</code><br> 会看到一个默认主题的hexo网站。</p>
-<p> <code>hexo new</code> 命令会创建一个md格式的文件，就是我们写博客的文件，推荐使用markdownpad来写，支持各种markdown格式，<br> 其实在使用过程中无需使用此命令创建，只要在blog下的<code>\source\_posts</code>文件夹下直接新建md格式的文件就可以了。Hexo在生成博客的时候回自动识别这个目录下写所有md文件。</p>
-<p>3.发布到GitHub<br> 找到blog目录下的<code>_config.yml</code>文件，加入以下节点<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">type: git</div><div class="line">repo:</div><div class="line">  github: &lt;repository url&gt;,[branch]</div></pre></td></tr></table></figure></p>
-<p>执行命令<br>hexo d 就可以完成发布，发布成功后，就可以在<code>https://yourname.github.io</code>看到自己更新的内容了，由于CDN缓存的缘故，有时候更新后要过一会才可以看到最新的内容。</p>
-<h3 id="参考地址"><a href="#参考地址" class="headerlink" title="参考地址"></a>参考地址</h3><p>   <a href="https://linghucong.js.org/2016/04/15/2016-04-15-hexo-github-pages-blog/" target="_blank" rel="external">https://linghucong.js.org/2016/04/15/2016-04-15-hexo-github-pages-blog/</a><br>   <a href="http://gitbeijing.com/pages.html" target="_blank" rel="external">http://gitbeijing.com/pages.html</a><br>   <a href="http://www.jianshu.com/p/b8dd1e3e0255" target="_blank" rel="external">http://www.jianshu.com/p/b8dd1e3e0255</a></p>
+<h2 id="什么情况下需要多账户的配置呢？"><a href="#什么情况下需要多账户的配置呢？" class="headerlink" title="什么情况下需要多账户的配置呢？"></a>什么情况下需要多账户的配置呢？</h2><p>1.在公司一般大家都会配置公司的代码仓库的账户，用的账号一般是公司企业邮箱账号,比如<code>zhangsan@XXX.com</code>,一般的配置流程都是企业入职的时候给一个配置清单或者新手指导，员工自己按照指导去配置，无非也就是用git的SSH 命令生成密钥对，然后将公钥上传至管理平台，就可以很开心的写Bug了，哦 不对，写码。<br>但是某一天有这样一个场景，有时候自己也会写点代码，这些代码一般我们托管在GitHub等平台上，这个时候就无法使用公司的账号了，需要再配置一个GitHub的账号，比如<code>zhangsan@Gmail.com</code>这样的账户名字。<br>2.由于天朝独特的网络环境,你们懂得，有时候GitHub无法连接或者不稳定，这个时候需要有一个国内的代码托管平台，国内比如码云这样的平台也可以托管代码，速度比较稳定。这个时候就需要同时配置GitHub和码云两个账户。</p>
+<h2 id="具体配置"><a href="#具体配置" class="headerlink" title="具体配置"></a>具体配置</h2><h3 id="第一种情况"><a href="#第一种情况" class="headerlink" title="第一种情况"></a>第一种情况</h3><blockquote>
+<p>公司账户和GitHub账户（不同邮箱）</p>
+</blockquote>
+<p>1.如果原来配置过一次，在用户目录下会有一个.ssh目录，里面存放着你默认第一次生成的秘钥对，<code>id_rsa</code>和<code>id_rsa.pub</code>,在此目录打开<code>Git bash</code> 输入命令 <code>ssh-keygen -C &quot;zhangsan@Gmail.com&quot; -t rsa</code> 然后回车 这个时候需要注意，需要给生成的秘钥对命名，比如<code>id_rsa_github</code>，不然会以默认的名字<code>id_rsa</code>生成，从而覆盖掉原来生成的。然后回车两次，就可以成功生成秘钥。<br>2.生成秘钥成功后，把生成公钥上传到GitHub的秘钥管理平台上，然后最重要的步骤来了。<br>回到用户目录的.ssh目录，创建一个config文本文件，注意这个文件名字为config，没有后缀名，尝试过加上.config后缀，貌似不会被识别。这个配置文件就是告诉ssh多个账户下，每个账户对应的秘钥位置和Host位置。<br>config配置文件<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># github </div><div class="line">Host github.com</div><div class="line">HostName github.com</div><div class="line">User zhangsan</div><div class="line">IdentityFile ~/.ssh/id_rsa_github</div><div class="line"></div><div class="line"># company</div><div class="line">Host code.company.com</div><div class="line">HostName code.company.com</div><div class="line">User zhangsan</div><div class="line">IdentityFile ~/.ssh/id_rsa</div></pre></td></tr></table></figure></p>
+<p>这样配置就结束了，打开<code>git bash</code> 输入命令测试一下<br><code>ssh -T git@github.com</code><br>成功的话会收到这样一段回复<br><code>Hi zhangsan! You&#39;ve successfully authenticated, but GitHub does not provide shell access.</code><br>不成功的话，检查下上面的配置，或者使用<code>ssh -vT git@github.com</code>  查看下详细的错误信息。<br>3.有些网友的帖子会说如果配置了全局的Git用户名和邮箱，需要去掉，其实不去掉也是可以的。如果你先设置了公司的账户为全局配置，那么你克隆GitHub上的代码到本地后，只要在那个目录设置本地的用户名和邮箱，就可以了，因为本地的优先级要大于全局的设定，公司的代码目录则继续使用全局配置，一样的互不影响。</p>
+<h3 id="第二种情况"><a href="#第二种情况" class="headerlink" title="第二种情况"></a>第二种情况</h3><blockquote>
+<p>GitHub和码云两个账号</p>
+</blockquote>
+<p>1.不同邮箱<br>如果你同时拥有GitHub和码云两个账号，而又不是使用同一邮箱注册，其实也类似于上面这张情况，分别生成不同邮箱的秘钥，然后再<code>config</code>文件里配置相应的用户、秘钥位置和<code>Host</code>就可以了。<br>2.相同邮箱<br>如果是相同的邮箱，就不需要上面的配置，只要用这个邮箱生成一次秘钥，这个秘钥可以同时用在两个网站上，两个远程仓库都可以提交，因为<code>SSH</code>秘钥是用邮箱生成的，邮箱相同，则秘钥也相同，所以可以共用一个。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/89cb26e5c3e8" target="_blank" rel="external">http://www.jianshu.com/p/89cb26e5c3e8</a><br><a href="https://gist.github.com/suziewong/4378434" target="_blank" rel="external">https://gist.github.com/suziewong/4378434</a><br><a href="http://noahsnail.com/2016/08/31/2016-9-1-Git%E5%A4%9A%E7%94%A8%E6%88%B7%E9%85%8D%E7%BD%AE/" target="_blank" rel="external">http://noahsnail.com/2016/08/31/2016-9-1-Git%E5%A4%9A%E7%94%A8%E6%88%B7%E9%85%8D%E7%BD%AE/</a><br><a href="https://steflerjiang.github.io/2016/12/16/git%E5%A4%9A%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE/" target="_blank" rel="external">https://steflerjiang.github.io/2016/12/16/git%E5%A4%9A%E8%B4%A6%E5%8F%B7%E9%85%8D%E7%BD%AE/</a></p>
 
       
     </div>
@@ -401,7 +404,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+            <a href="/tags/git/" rel="tag"># git</a>
           
         </div>
       
@@ -414,14 +417,18 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
+              <a href="/2017/08/20/sonar本地配置/" rel="next" title="SonarQube 服务搭建与配置">
+                <i class="fa fa-chevron-left"></i> SonarQube 服务搭建与配置
+              </a>
+            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/08/20/sonar本地配置/" rel="prev" title="SonarQube 服务搭建与配置">
-                SonarQube 服务搭建与配置 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/08/22/java/JSP和Servlet/" rel="prev" title="Servlet和JSP">
+                Servlet和JSP <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -576,7 +583,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#闲扯一会"><span class="nav-number">1.</span> <span class="nav-text">闲扯一会</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#博客搭建"><span class="nav-number">2.</span> <span class="nav-text">博客搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub-Pages-设置"><span class="nav-number">2.1.</span> <span class="nav-text">GitHub Pages 设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装Hexo"><span class="nav-number">2.2.</span> <span class="nav-text">安装Hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考地址"><span class="nav-number">2.3.</span> <span class="nav-text">参考地址</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么情况下需要多账户的配置呢？"><span class="nav-number">1.</span> <span class="nav-text">什么情况下需要多账户的配置呢？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体配置"><span class="nav-number">2.</span> <span class="nav-text">具体配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一种情况"><span class="nav-number">2.1.</span> <span class="nav-text">第一种情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#第二种情况"><span class="nav-number">2.2.</span> <span class="nav-text">第二种情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
             
 
           </div>
