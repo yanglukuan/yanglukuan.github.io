@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="tcGzXHmj_nXK7gGlZREm6t6k7bfrGt6HkfEZbGVZR_8" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,集合,HashSet,LinkedHashSet,TreeSet," />
+
+
+
+
+
+  <link rel="alternate" href="/rss.xml" title="kevin.yang" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本文基于jdk1.8介绍Set接口下的常用实现类。 java 集合框架在前两篇文章中， 我们介绍了Java集合框架下List接口下的ArrayList和LinkedList两个实现类，今天我们来看一下Set接口下的几个实现类HashSet、LinkedHashSet和TreeSet。下面还是先来看一下Collection接口的类图： Collection接口类图  由类图我们可以看到，set接口继">
+<meta name="keywords" content="Java,集合,HashSet,LinkedHashSet,TreeSet">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合框架之Set接口详解">
+<meta property="og:url" content="https://yanglukuan.github.io/2017/09/09/java/Java集合框架之Set接口详解/index.html">
+<meta property="og:site_name" content="kevin.yang">
+<meta property="og:description" content="本文基于jdk1.8介绍Set接口下的常用实现类。 java 集合框架在前两篇文章中， 我们介绍了Java集合框架下List接口下的ArrayList和LinkedList两个实现类，今天我们来看一下Set接口下的几个实现类HashSet、LinkedHashSet和TreeSet。下面还是先来看一下Collection接口的类图： Collection接口类图  由类图我们可以看到，set接口继">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://yanglukuan.github.io/images/arrayList/Collections.png">
+<meta property="og:image" content="https://yanglukuan.github.io/images/set/hashset.png">
+<meta property="og:image" content="https://yanglukuan.github.io/images/set/linkedHashSet.png">
+<meta property="og:image" content="https://yanglukuan.github.io/images/set/treeSet.png">
+<meta property="og:updated_time" content="2017-09-15T13:17:12.650Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java集合框架之Set接口详解">
+<meta name="twitter:description" content="本文基于jdk1.8介绍Set接口下的常用实现类。 java 集合框架在前两篇文章中， 我们介绍了Java集合框架下List接口下的ArrayList和LinkedList两个实现类，今天我们来看一下Set接口下的几个实现类HashSet、LinkedHashSet和TreeSet。下面还是先来看一下Collection接口的类图： Collection接口类图  由类图我们可以看到，set接口继">
+<meta name="twitter:image" content="https://yanglukuan.github.io/images/arrayList/Collections.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yanglukuan.github.io/2017/09/09/java/Java集合框架之Set接口详解/"/>
+
+
+
+
+
+  <title>Java集合框架之Set接口详解 | kevin.yang</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kevin.yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">博闻强记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yanglukuan.github.io/2017/09/09/java/Java集合框架之Set接口详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kevin.yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/12642715.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kevin.yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Java集合框架之Set接口详解</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-09T21:22:09+08:00">
+                2017-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文基于<code>jdk1.8</code>介绍<code>Set</code>接口下的常用实现类。</p>
+<h2 id="java-集合框架"><a href="#java-集合框架" class="headerlink" title="java 集合框架"></a>java 集合框架</h2><p>在前两篇文章中， 我们介绍了Java集合框架下<code>List</code>接口下的<code>ArrayList</code>和<code>LinkedList</code>两个实现类，今天我们来看一下<code>Set</code>接口下的几个实现类<code>HashSet</code>、<code>LinkedHashSet</code>和<code>TreeSet</code>。下面还是先来看一下<code>Collection</code>接口的类图：</p>
+<center><img src="/images/arrayList/Collections.png" alt="Collection接口类图"></center><center><strong><em>Collection接口类图</em></strong></center>
+
+<p>由类图我们可以看到，<code>set</code>接口继承自<code>Collection</code>接口且有四个实现类，分别为<code>AbstractSet</code>、<code>HashSet</code>、<code>LinkedHashSet</code>和<code>TreeSet</code>，其中<code>AbstractSet</code>为抽象类，继承自<code>AbstractCollection</code>，实现了最基本的<code>Collection</code>骨架。下面我们分别来看一下其余三个实现类的实现原理。</p>
+<h2 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h2><center><img src="/images/set/hashset.png" alt="HashSet类图"></center><center><strong><em>HashSet类图</em></strong></center>
+
+<p>对于<code>HashSet</code>而言，它是基于<code>HashMap</code>实现的，可以看作是对<code>HashMap</code>的封装，<code>HashSet</code>底层使用<code>HashMap</code>来保存所有元素，因此<code>HashSet</code>的实现比较简单，相关<code>HashSet</code>的操作，基本上都是直接调用底层<code>HashMap</code>的相关方法来完成， 如果看过了<code>HashMap</code>的源码之后，再来看<code>HashSet</code>会比较好理解一些，如果对<code>HashMap</code>的原理不熟悉的话，可以先回顾一下我们前几天对<code>HashMap</code>分析的博文<a href="/2017/08/31/java/HashMap详解/" title="Java集合框架之HashMap详解">Java集合框架之HashMap详解</a>。下面我们结合源码来具体分析一下<code>HashSet</code>的具体实现。</p>
+<h3 id="成员变量"><a href="#成员变量" class="headerlink" title="成员变量"></a>成员变量</h3><p>首先看一下两个成员变量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="keyword">transient</span> HashMap&lt;E,Object&gt; map;<span class="comment">//存储元素的map</span></div><div class="line"></div><div class="line">  <span class="comment">// Dummy value to associate with an Object in the backing Map</span></div><div class="line">  <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object PRESENT = <span class="keyword">new</span> Object(); <span class="comment">//元素的默认vlaue</span></div></pre></td></tr></table></figure></p>
+<p>通过这两个成员变量我们可以看到，在<code>HashSet</code>的内部维护着一个<code>HashMap</code>类型的变量<code>map</code>，这个<code>map</code>就是用来存储元素的容器。那我们知道，<code>HashMap</code>存储的是<code>key-value</code>形式的键值对，而<code>set</code>是一个单值对象，这要怎么存储呢？那就要看第二个成员变量<code>PRESENT</code>了，<code>PRESENT</code>是一个<code>Object</code>对象，这个对象就是充当键值对的值的，也就是说，我们只会把需要存储的元素当作<code>map</code>的<code>key</code>，而对应的<code>value</code>则默认为这个<code>Object</code>对象，这就是<code>HashSet</code>内部实现存储元素的数据结构。所以由<code>HashMap</code>的特性我们可以知道，<code>HashSet</code>存储的元素是无序的，元素不是不可重复的并且可以为<code>null</code>，基于这个元素不允许重复的特性，<code>HashSet</code>经常被用来做元素的去重。</p>
+<h3 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h3><p>下面我们看一下<code>HashSet</code>提供的构造方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">  </div><div class="line"><span class="comment">//构造一个使用HashMap的默认容量大小16和默认加载因子0.75初始化map的HashSet</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="title">HashSet</span><span class="params">()</span> </span>&#123;</div><div class="line">     map = <span class="keyword">new</span> HashMap&lt;&gt;();</div><div class="line"> &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">//根据 Collection 接口构造一个HashSet</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="title">HashSet</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</div><div class="line">     map = <span class="keyword">new</span> HashMap&lt;&gt;(Math.max((<span class="keyword">int</span>) (c.size()/.<span class="number">75f</span>) + <span class="number">1</span>, <span class="number">16</span>));</div><div class="line">     addAll(c);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> <span class="comment">//使用指定的初始容量大小和加载因子初始化map，构造一个HashSet</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="title">HashSet</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</div><div class="line">     map = <span class="keyword">new</span> HashMap&lt;&gt;(initialCapacity, loadFactor);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="comment">//使用指定的初始容量大小初始化map，构造一个HashSet</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="title">HashSet</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</div><div class="line">     map = <span class="keyword">new</span> HashMap&lt;&gt;(initialCapacity);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> <span class="comment">//构造一个LinkedHashMap，不对外公开 </span></div><div class="line"> HashSet(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor, <span class="keyword">boolean</span> dummy) &#123;</div><div class="line">     map = <span class="keyword">new</span> LinkedHashMap&lt;&gt;(initialCapacity, loadFactor);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p><code>HashSet</code>一共提供了5个构造方法，由构造方法也可以看到，底层是用了<code>HashMap</code>的数据结构实现，构造方法也跟<code>HashMap</code>比较类似，这里重点要说一下<code>HashSet(int initialCapacity, float loadFactor, boolean dummy)</code>这个构造方法，这个构造方法是不对外部公开的，其实放在这里实现是为了给<code>LinkedHashSet</code>使用，下文我们会讲到这一点。</p>
+<h3 id="存取实现"><a href="#存取实现" class="headerlink" title="存取实现"></a>存取实现</h3><p>添加元素<br>由于底层使用了<code>HashMap</code>作存储结构，这里直接调用了<code>HashMap</code>的<code>put</code>方法插入元素，元素被作为<code>key</code>插入的<code>map</code>中，而<code>value</code>则是使用的默认值<code>Object</code>对象。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">     <span class="keyword">return</span> map.put(e, PRESENT)==<span class="keyword">null</span>;<span class="comment">//直接将元素作为map的key插入</span></div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>遍历<br><code>HashSet</code>支持两种遍历方式，<code>Iterator</code>方式，<code>foreach</code>方式，不支持随机访问方式遍历。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> Set&lt;String&gt; set=<span class="keyword">new</span> HashSet&lt;&gt;();</div><div class="line"> hashset.add(<span class="string">"1"</span>);</div><div class="line"> hashset.add(<span class="string">"2"</span>);</div><div class="line"></div><div class="line"><span class="comment">//Iterator遍历  </span></div><div class="line"><span class="keyword">for</span>(Iterator iterator = set.iterator();</div><div class="line">      iterator.hasNext(); ) &#123; </div><div class="line">   iterator.next();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//foreach遍历</span></div><div class="line"> <span class="keyword">for</span> (String str:set)&#123;</div><div class="line">    System.out.println(str);</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<h3 id="特性总结"><a href="#特性总结" class="headerlink" title="特性总结"></a>特性总结</h3><p>1、由于底层基于<code>HashMap</code>实现，内部使用基于哈希表的数组+链表方式存储，所以不保证元素的存取顺序。<br>2、基于<code>key</code>的<code>hash</code>值存储，同样的对象<code>hash</code>值相同，所以元素不可重复，但是可以为<code>null</code>，可以快速查找是否包含某个元素。   </p>
+<h2 id="LinkedHashSet"><a href="#LinkedHashSet" class="headerlink" title="LinkedHashSet"></a>LinkedHashSet</h2><center><img src="/images/set/linkedHashSet.png" alt="LinkedHashSet类图"></center><center><strong><em>LinkedHashSet类图</em></strong></center>
+
+<p>由类图我们可以看到，<code>LinkedHashSet</code>继承自<code>HashSet</code>，内部是基于<code>LinkedHashMap</code>来实现的。<code>LinkedHashSet</code>底层使用<code>LinkedHashMap</code>来保存所有元素，其所有的方法操作上又与<code>HashSet</code>相同，因此<code>LinkedHashSet</code> 的实现上非常简单，只提供了四个构造方法和一个<code>spliterator</code>方法，并通过传递一个标识参数，调用父类的构造方法，上文我们说到<code>HashSet</code>预留了一个不对外部公开的构造方法，就是用在这里。底层构造一个<code>LinkedHashMap来实现</code>，在相关操作上与父类<code>HashSet</code>的操作相同，直接调用父类<code>HashSet</code>的方法即可。</p>
+<p><code>LinkedHashSet</code>源码，由于底层使用<code>LinkedHashMap</code>作为存储结构，又继承了<code>HashSet</code>的各种方法，所以源码比较简单，这里就不做分析了，具体实现原理，参照<a href="/2017/09/05/java/Java集合框架之LinkedHashMap详解/" title="Java集合框架之LinkedHashMap详解">Java集合框架之LinkedHashMap详解</a>  一文。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> <span class="comment">//使用指定的初始容量大小和加载因子初始化map，构造一个LinkedHashSet</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="title">LinkedHashSet</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</div><div class="line">     <span class="keyword">super</span>(initialCapacity, loadFactor, <span class="keyword">true</span>);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="comment">//使用指定的初始容量大小初始化map，构造一个LinkedHashSet</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="title">LinkedHashSet</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</div><div class="line">     <span class="keyword">super</span>(initialCapacity, .<span class="number">75f</span>, <span class="keyword">true</span>);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> <span class="comment">// 构造一个使用HashMap的默认容量大小16和默认加载因子0.75初始化map的LinkedHashSet</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="title">LinkedHashSet</span><span class="params">()</span> </span>&#123;</div><div class="line">     <span class="keyword">super</span>(<span class="number">16</span>, .<span class="number">75f</span>, <span class="keyword">true</span>);</div><div class="line"> &#125;</div><div class="line"></div><div class="line">  <span class="comment">//根据 Collection 接口构造一个inkedHashSet</span></div><div class="line"> <span class="function"><span class="keyword">public</span> <span class="title">LinkedHashSet</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</div><div class="line">     <span class="keyword">super</span>(Math.max(<span class="number">2</span>*c.size(), <span class="number">11</span>), .<span class="number">75f</span>, <span class="keyword">true</span>);</div><div class="line">     addAll(c);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"> <span class="comment">// 调用Spliterator接口中的spliterator()方法，将集合分割后遍历</span></div><div class="line"> <span class="meta">@Override</span></div><div class="line"> <span class="function"><span class="keyword">public</span> Spliterator&lt;E&gt; <span class="title">spliterator</span><span class="params">()</span> </span>&#123;</div><div class="line">     <span class="keyword">return</span> Spliterators.spliterator(<span class="keyword">this</span>, Spliterator.DISTINCT | Spliterator.ORDERED);</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="特性总结-1"><a href="#特性总结-1" class="headerlink" title="特性总结"></a>特性总结</h3><p>1、底层存储基于<code>LinkedHashMap</code>实现，内部使用双向链表存储元素，所以保证了元素的顺序性。<br>2、基于<code>key</code>的<code>hash</code>值存储，同样的对象<code>hash</code>值相同，所以元素不可重复，但是可以为<code>null</code>，可以快速查找是否包含某个元素。 </p>
+<h2 id="TreeSet"><a href="#TreeSet" class="headerlink" title="TreeSet"></a>TreeSet</h2><center><img src="/images/set/treeSet.png" alt="TreeSet类图"></center><center><strong><em>TreeSet类图</em></strong></center>
+
+<p>还是先看类图，<code>TreeSet</code>继承自<code>AbstractSet</code>，实现了<code>NavigableSet</code>接口，<code>AbstractSet</code>为抽象类，继承自<code>AbstractCollection</code>，实现了最基本的<code>Collection</code>骨架。<code>TreeSet</code>是基于<code>TreeMap</code>实现的有序集合，<code>TreeSet</code>中含有一个<code>NavigableMap</code>类型的成员变量<code>m</code>，而<code>m</code>实际上是<code>TreeMap</code>的实例。我们知道<code>TreeMap</code>内部是用红黑树实现元素存储从而保证元素的顺序性的，那么同理<code>TreeSet</code>同样也是一个有序的集合。通过源码我们知道<code>TreeSet</code>继承自<code>AbstractSet</code>，实现<code>NavigableSet</code>、<code>Cloneable</code>、<code>Serializable</code>接口。其中<code>AbstractSet</code>提供 <code>Set</code> 接口的骨干实现，从而最大限度地减少了实现此接口所需的工作。<code>NavigableSet</code>是扩展的 <code>SortedSet</code>，具有了为给定搜索目标报告最接近匹配项的导航方法，这就意味着它支持一系列的导航方法。比如查找与指定目标最匹配项。<code>Cloneable</code>支持克隆，<code>Serializable</code>支持序列化。由于TreeSet底层通过调用TreeMap实现，这里不再重复分析了，具体实现原理，参照<a href="/2017/09/06/java/Java集合框架之TreeMap详解/" title="Java集合框架之TreeMap详解">Java集合框架之TreeMap详解</a>  一文。</p>
+<p>成员变量<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> <span class="comment">//NavigableMap 对象</span></div><div class="line"> <span class="keyword">private</span> <span class="keyword">transient</span> NavigableMap&lt;E,Object&gt; m;</div><div class="line"></div><div class="line"><span class="comment">//map的value值</span></div><div class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Object PRESENT = <span class="keyword">new</span> Object();</div></pre></td></tr></table></figure></p>
+<p>构造方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//构造由指定的可导航映射支持的集合。</span></div><div class="line">TreeSet(NavigableMap&lt;E,Object&gt; m) &#123;</div><div class="line">    <span class="keyword">this</span>.m = m;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//默认构造方法  根据其元素的自然顺序进行排序 </span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">TreeSet</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>(<span class="keyword">new</span> TreeMap&lt;E,Object&gt;());</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//构造一个包含指定 collection 的TreeSet，它按照其元素的顺序进行排序</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">TreeSet</span><span class="params">(Comparator&lt;? <span class="keyword">super</span> E&gt; comparator)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>(<span class="keyword">new</span> TreeMap&lt;&gt;(comparator));</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//构造一个指定Collection参数的TreeSet</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">TreeSet</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>();</div><div class="line">    addAll(c);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//构造一个指定SortedMap的TreeSet，根据SortedMap的比较器来来维持TreeSet的顺序</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">TreeSet</span><span class="params">(SortedSet&lt;E&gt; s)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>(s.comparator());</div><div class="line">    addAll(s);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="特性总结-2"><a href="#特性总结-2" class="headerlink" title="特性总结"></a>特性总结</h3><p>1、底层存储基于<code>TreeMap</code>实现，内部使用红黑树结构表存储元素，所以保证了元素的顺序性。<br>2、元素不可为<code>null</code>。<br>2、遍历时不支持随机访问，只能通过迭代器和<code>for-each</code>遍进行遍历。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/1f7a8dda341b" target="_blank" rel="external">http://www.jianshu.com/p/1f7a8dda341b</a><br><a href="http://www.cnblogs.com/leesf456/p/5309809.html" target="_blank" rel="external">http://www.cnblogs.com/leesf456/p/5309809.html</a><br><a href="http://blog.csdn.net/canot/article/details/51246944" target="_blank" rel="external">http://blog.csdn.net/canot/article/details/51246944</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/集合/" rel="tag"># 集合</a>
+          
+            <a href="/tags/HashSet/" rel="tag"># HashSet</a>
+          
+            <a href="/tags/LinkedHashSet/" rel="tag"># LinkedHashSet</a>
+          
+            <a href="/tags/TreeSet/" rel="tag"># TreeSet</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/08/java/Java集合框架之LinkedList详解/" rel="next" title="Java集合框架之LinkedList详解">
+                <i class="fa fa-chevron-left"></i> Java集合框架之LinkedList详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/12/java/Java集合框架总结/" rel="prev" title="Java集合框架总结">
+                Java集合框架总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDg1Mi83NDAx"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/12642715.jpg"
+               alt="kevin.yang" />
+          <p class="site-author-name" itemprop="name">kevin.yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/rss.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yanglukuan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#java-集合框架"><span class="nav-number">1.</span> <span class="nav-text">java 集合框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HashSet"><span class="nav-number">2.</span> <span class="nav-text">HashSet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#成员变量"><span class="nav-number">2.1.</span> <span class="nav-text">成员变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造方法"><span class="nav-number">2.2.</span> <span class="nav-text">构造方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存取实现"><span class="nav-number">2.3.</span> <span class="nav-text">存取实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特性总结"><span class="nav-number">2.4.</span> <span class="nav-text">特性总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedHashSet"><span class="nav-number">3.</span> <span class="nav-text">LinkedHashSet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特性总结-1"><span class="nav-number">3.1.</span> <span class="nav-text">特性总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TreeSet"><span class="nav-number">4.</span> <span class="nav-text">TreeSet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特性总结-2"><span class="nav-number">4.1.</span> <span class="nav-text">特性总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">5.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kevin.yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

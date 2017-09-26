@@ -110,7 +110,7 @@
 <meta property="og:image" content="https://yanglukuan.github.io/images/hashmap/hashmapstructure.png">
 <meta property="og:image" content="https://yanglukuan.github.io/images/hashmap/hashmapput.png">
 <meta property="og:image" content="https://yanglukuan.github.io/images/hashmap/hashmaphash.png">
-<meta property="og:updated_time" content="2017-09-05T13:03:59.126Z">
+<meta property="og:updated_time" content="2017-09-15T13:17:12.577Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java集合框架之HashMap详解">
 <meta name="twitter:description" content="基础扫盲本文基于jdk1.8介绍HashMap。 java 集合框架 Java的集合类主要由两个接口派生而出：Collection和Map，Collection和Map是Java集合框架的根接口，这两个接口又包含了一些接口或实现类。Set和List接口是Collection接口派生的两个子接口，Queue是Java提供的队列实现，类似于List。Map是一个映射接口，其中的每个元素都是一个key-">
@@ -408,7 +408,7 @@
 <h3 id="Hash-冲突"><a href="#Hash-冲突" class="headerlink" title="Hash 冲突"></a>Hash 冲突</h3><hr>
 <p>对不同的关键字可能得到同一散列地址，即 <code>k1!=k2</code>，而<code>f(k1)==f(k2)</code>，这种现象称为冲突（英语：Collision）。具有相同函数值的关键字对该散列函数来说称做同义词。综上所述，根据散列函数f(k)和处理冲突的方法将一组关键字映射到一个有限的连续的地址集（区间）上，并以关键字在地址集中的“像”作为记录在表中的存储位置，这种表便称为散列表，这一映射过程称为散列造表或散列，所得的存储位置称散列地址。解决碰撞有很多方法可以使用，最常用的包括链地址法和开地址法。<code>HashMap</code>就是用的链地址的方法解决冲突。</p>
 <h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><hr>
-<p><code>HashMap</code>是我们经常使用一个映射容器，通过牺牲存储空间来换取检索时间，<code>HashMap</code>是采用了hash表数据结构思想来实现。在<code>key</code>未发生冲突的情况下，搜索时间复杂度为O(1),可以快速定位元素。因此在日常开发中也被程序员广泛使用，例如作为关系映射容器、简单缓存、提高检索速度等。<code>HashMap</code>最多只允许一个键值为<code>null</code>(保存在数据列表中的第0个元素的链表上)，允许<code>value</code>为<code>null</code>值。</p>
+<p><code>HashMap</code>是我们经常使用一个映射容器，通过牺牲存储空间来换取检索时间，<code>HashMap</code>是采用了hash表数据结构来实现。在<code>key</code>未发生冲突的情况下，搜索时间复杂度为<code>O(1)</code>,可以快速定位元素。因此在日常开发中也被程序员广泛使用，例如作为关系映射容器、简单缓存提高检索速度等。<code>HashMap</code>最多只允许一个键值为<code>null</code>(保存在数据列表中的第0个元素的链表上)，允许<code>value</code>为<code>null</code>值。</p>
 <h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><hr>
 <p><code>HashMap</code>实现了<code>Map</code>接口，继承<code>AbstractMap</code>。其中<code>Map</code>接口定义了键映射到值的规则，而<code>AbstractMap</code>类提供 <code>Map</code> 接口的骨干实现。<code>java</code>的<code>HashMap</code>结构上采用了数组链表方式，即数组+链表的数据结构，采用这种结构的原因是采用了链地址的方法解决哈希冲突。但是这样带来了一个问题，当某个链表达到一定的长度时，对于链表元素的查找会变成线性搜索，比较耗时。所以在<code>JDK1.8</code>的实现中做了优化，当链表的长度达到一定数量（<code>TREEIFY_THRESHOLD</code>默认值为8）时，会把链表转为红黑树，所以在<code>JDK1.8</code>的版本<code>HashMap</code>的数据结构为数组+链表+红黑树。<br>在<code>HashMap</code>中，通过<code>Node[] table</code>，(<code>jdk 1.7</code>叫做<code>Entry</code>，<code>jdk 1.8</code>加入红黑树后改为<code>Node</code>,原因是和红黑树的实现<code>TreeNode</code>相关联)来实现该结构，该数组可以看做是一个哈希桶数组，每个桶中存放着一个链表，Node是链表节点,并实现了<code>Map.Entry</code>。<code>Node</code>节点存放一个键值对，同时存放一个指向下一个节点的引用。<code>Node</code>是键值对存储单元，通过<code>hash</code>值来确定该元素在数组链表中的位置。基于这个存储结构，我们也可以看出，<code>HashMap</code>是不保证存取的顺序性的，也就是说遍历<code>HashMap</code>的时候，得到的元素的顺序与添加元素的顺序是不同的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">  Node结构源码</div><div class="line">  <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; <span class="keyword">implements</span> <span class="title">Map</span>.<span class="title">Entry</span>&lt;<span class="title">K</span>,<span class="title">V</span>&gt; </span>&#123;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> hash; <span class="comment">//用来定位数组索引位置，hash值不允许修改。</span></div><div class="line">        <span class="keyword">final</span> K key; <span class="comment">//key, 都是常数不允许修改。同时key是一个不可变对象。</span></div><div class="line">        V value;<span class="comment">//对应value</span></div><div class="line">        Node&lt;K,V&gt; next;<span class="comment">//下一个节点</span></div><div class="line"></div><div class="line">        Node(<span class="keyword">int</span> hash, K key, V value, Node&lt;K,V&gt; next) &#123;</div><div class="line">            <span class="keyword">this</span>.hash = hash;</div><div class="line">            <span class="keyword">this</span>.key = key;</div><div class="line">            <span class="keyword">this</span>.value = value;</div><div class="line">            <span class="keyword">this</span>.next = next;</div><div class="line">        &#125;</div><div class="line">        后面代码省略。。。。。。。。。。</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <center><img src="/images/hashmap/hashmapstructure.png" alt="存储结构"></center><center><strong><em>存储结构</em></strong></center>
@@ -502,6 +502,8 @@
           
   <div class="comments" id="comments">
     
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDg1Mi83NDAx"></div>
+    
   </div>
 
 
@@ -549,7 +551,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -560,7 +562,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -571,7 +573,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -797,6 +799,17 @@
 
 
 
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
   
 
 

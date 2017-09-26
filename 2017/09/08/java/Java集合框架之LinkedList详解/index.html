@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="tcGzXHmj_nXK7gGlZREm6t6k7bfrGt6HkfEZbGVZR_8" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,集合,LinkedList," />
+
+
+
+
+
+  <link rel="alternate" href="/rss.xml" title="kevin.yang" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本文基于jdk1.8介绍LinkedList。在上一篇文章Java集合框架之ArrayList详解中， 我们介绍了Java集合框架下Collection接口的一个实现类ArrayList。通过源码分析，我们了解了ArrayList的存储结构和内部实现，今天我们再来看一下另外一个实现类LinkedList。 Collection接口类图  LinkedListLinkedList类图  1234//">
+<meta name="keywords" content="Java,集合,LinkedList">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合框架之LinkedList详解">
+<meta property="og:url" content="https://yanglukuan.github.io/2017/09/08/java/Java集合框架之LinkedList详解/index.html">
+<meta property="og:site_name" content="kevin.yang">
+<meta property="og:description" content="本文基于jdk1.8介绍LinkedList。在上一篇文章Java集合框架之ArrayList详解中， 我们介绍了Java集合框架下Collection接口的一个实现类ArrayList。通过源码分析，我们了解了ArrayList的存储结构和内部实现，今天我们再来看一下另外一个实现类LinkedList。 Collection接口类图  LinkedListLinkedList类图  1234//">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://yanglukuan.github.io/images/arrayList/Collections.png">
+<meta property="og:image" content="https://yanglukuan.github.io/images/linkedlist/linkedlist.png">
+<meta property="og:image" content="https://yanglukuan.github.io/images/linkedlist/linkedlistnode.png">
+<meta property="og:updated_time" content="2017-09-15T13:17:12.636Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java集合框架之LinkedList详解">
+<meta name="twitter:description" content="本文基于jdk1.8介绍LinkedList。在上一篇文章Java集合框架之ArrayList详解中， 我们介绍了Java集合框架下Collection接口的一个实现类ArrayList。通过源码分析，我们了解了ArrayList的存储结构和内部实现，今天我们再来看一下另外一个实现类LinkedList。 Collection接口类图  LinkedListLinkedList类图  1234//">
+<meta name="twitter:image" content="https://yanglukuan.github.io/images/arrayList/Collections.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yanglukuan.github.io/2017/09/08/java/Java集合框架之LinkedList详解/"/>
+
+
+
+
+
+  <title>Java集合框架之LinkedList详解 | kevin.yang</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kevin.yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">博闻强记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yanglukuan.github.io/2017/09/08/java/Java集合框架之LinkedList详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kevin.yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/12642715.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kevin.yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Java集合框架之LinkedList详解</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-08T10:46:13+08:00">
+                2017-09-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文基于<code>jdk1.8</code>介绍<code>LinkedList</code>。<br>在上一篇文章<a href="/2017/09/07/java/Java集合框架之ArrayList详解/" title="Java集合框架之ArrayList详解">Java集合框架之ArrayList详解</a>中， 我们介绍了Java集合框架下Collection接口的一个实现类<code>ArrayList</code>。通过源码分析，我们了解了<code>ArrayList</code>的存储结构和内部实现，今天我们再来看一下另外一个实现类LinkedList。</p>
+<center><img src="/images/arrayList/Collections.png" alt="Collection接口类图"></center><center><strong><em>Collection接口类图</em></strong></center>
+
+<h2 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h2><center><img src="/images/linkedlist/linkedlist.png" alt="LinkedList类图"></center><center><strong><em>LinkedList类图</em></strong></center>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//继承关系</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line"><span class="class">    <span class="keyword">extends</span> <span class="title">AbstractSequentialList</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">Deque</span>&lt;<span class="title">E</span>&gt;, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></div></pre></td></tr></table></figure>
+<p>结合<code>Collection</code>和<code>LinkedList</code>的类图我们知道，<code>LinkedList</code>实现了<code>List</code>接口，并直接继承自<code>AbstractSequentialList</code>，<code>AbstractSequentialList</code>继承自<code>AbstractList</code>，<code>AbstractSequentialList</code> 把父类 <code>AbstractList</code> 中没有实现或者没有支持的操作都实现了，而且都是调用的 <code>ListIterator</code> 相关方法进行操作。还有一个就是继承了<code>Deque</code>接口，<code>Deque</code>接口表示是一个队列，那么也意味着<code>LinkedList</code>是双端队列的一种实现，所以，基于双端队列的操作在<code>LinkedList</code>中全部有效。</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><p>我们还是先看一下<code>LinkedList</code>的数据结构，通过分析数据结构，看一下它的特性。通过查看源码，我们可以看到，在<code>LinkedList</code>的内部有一个内部类，其结构如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//内部类 实现双向链表结构</span></div><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">E</span>&gt; </span>&#123;</div><div class="line">    E item;</div><div class="line">    Node&lt;E&gt; next;</div><div class="line">    Node&lt;E&gt; prev;</div><div class="line"></div><div class="line">    Node(Node&lt;E&gt; prev, E element, Node&lt;E&gt; next) &#123;</div><div class="line">        <span class="keyword">this</span>.item = element;</div><div class="line">        <span class="keyword">this</span>.next = next;</div><div class="line">        <span class="keyword">this</span>.prev = prev;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//成员属性</span></div><div class="line"></div><div class="line"><span class="comment">//元素个数</span></div><div class="line"><span class="keyword">transient</span> <span class="keyword">int</span> size = <span class="number">0</span>;</div><div class="line"><span class="comment">//双向链表的头指针</span></div><div class="line"><span class="keyword">transient</span> Node&lt;E&gt; first;</div><div class="line"><span class="comment">//双向链表的尾部指针</span></div><div class="line"><span class="keyword">transient</span> Node&lt;E&gt; last;</div></pre></td></tr></table></figure>
+<center><img src="/images/linkedlist/linkedlistnode.png" alt="Node结构"></center><center><strong><em>Node结构</em></strong></center>
+
+<p>通过以上代码我们可以看到，在这个内部类Node中，有三个属性，item表示当前数据元素，next表示下一个元素的引用，prev表示前一个元素的引用。这很明显是一个双向链表的数据结构。<code>LinkedList</code>正是利用这个双向链表的数据结构实现了内部的元素存储，并通过维护一个头指针和尾指针，进行元素的增加和删除。基于这个数据结构，我们可以看到<code>LinkedList</code>的一些特性，比如有序性、元素可重复、可为空，上文我们还说到<code>LinkedList</code>继承了Deque接口，基于这样一个数据结构，我们可以将<code>LinkedList</code>当作一个双端队列来使用。</p>
+<h3 id="构造"><a href="#构造" class="headerlink" title="构造"></a>构造</h3><p>下面我们看一下<code>LinkedList</code>的构造函数，<code>LinkedList</code>提供了两个构造函数，一个是默认的构造函数，实例化一个为空的<code>LinkedList</code>，另外一个可以传入一个Collection接口，将这个Collection转换为LinkedList。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">//默认构造函数</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">()</span> </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"> <span class="comment">//传入一个 Collection接口的参数</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</div><div class="line">    <span class="keyword">this</span>();</div><div class="line">    addAll(c);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="存取"><a href="#存取" class="headerlink" title="存取"></a>存取</h3><p>分析完数据结构和构造方法，我们重点来看一下<code>LinkedList</code>基于双向链表的存取的实现方式，我们结合源码先看一下添加的方法。<code>LinkedList</code>重写了add方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//添加元素</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">add</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">      linkLast(e);</div><div class="line">      <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line"> <span class="comment">//在LinkedList末尾插入元素 并移动头尾指针</span></div><div class="line">  <span class="function"><span class="keyword">void</span> <span class="title">linkLast</span><span class="params">(E e)</span> </span>&#123;</div><div class="line">      <span class="keyword">final</span> Node&lt;E&gt; l = last; <span class="comment">//尾指针赋值</span></div><div class="line">      <span class="keyword">final</span> Node&lt;E&gt; newNode = <span class="keyword">new</span> Node&lt;&gt;(l, e, <span class="keyword">null</span>);<span class="comment">//生成新的节点 </span></div><div class="line">      last = newNode; <span class="comment">//重新赋值尾节点</span></div><div class="line">      <span class="keyword">if</span> (l == <span class="keyword">null</span>)<span class="comment">//尾节点为空</span></div><div class="line">          first = newNode;<span class="comment">//链表为空，这是插入的第一个元素</span></div><div class="line">      <span class="keyword">else</span></div><div class="line">          l.next = newNode;<span class="comment">//尾节点的后继为新生的节点</span></div><div class="line">      size++;<span class="comment">//元素数自增</span></div><div class="line">      modCount++;<span class="comment">//结构修改自增</span></div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<p>由代码我们可以看到，<code>add</code>函数用于向<code>LinkedList</code>中添加一个元素，并且添加到链表尾部，具体添加到尾部的逻辑是由<code>LinkLast</code>方法完成的。在<code>LinkLast</code>方法中，先构造一个新节点，并使<code>last</code>指向新节点。先用<code>l</code>备份<code>last</code>，再创建一个新的节点，并使<code>last</code>指向新节点。如果<code>last</code>为空，意味着原链表为空，需要把<code>first</code>指向新节点，否则使l的后继指向新节点，这样就完成了一次元素的插入。</p>
+<p>获取元素<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"> <span class="comment">//根据索引获取元素</span></div><div class="line"> <span class="function"><span class="keyword">public</span> E <span class="title">get</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">     checkElementIndex(index);<span class="comment">//检查索引是否越界</span></div><div class="line">     <span class="keyword">return</span> node(index).item;<span class="comment">//定位索引元素</span></div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="comment">//定位元素位置</span></div><div class="line"> <span class="function">Node&lt;E&gt; <span class="title">node</span><span class="params">(<span class="keyword">int</span> index)</span> </span>&#123;</div><div class="line">     <span class="comment">// assert isElementIndex(index);</span></div><div class="line"></div><div class="line">     <span class="keyword">if</span> (index &lt; (size &gt;&gt; <span class="number">1</span>)) &#123;</div><div class="line">         Node&lt;E&gt; x = first;</div><div class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; index; i++)</div><div class="line">             x = x.next;</div><div class="line">         <span class="keyword">return</span> x;</div><div class="line">     &#125; <span class="keyword">else</span> &#123;</div><div class="line">         Node&lt;E&gt; x = last;</div><div class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = size - <span class="number">1</span>; i &gt; index; i--)</div><div class="line">             x = x.prev;</div><div class="line">         <span class="keyword">return</span> x;</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<p>获取元素前会校验索引是否越界，没有越界的话就开始遍历链表，找到元素位置。这里并没有直接从链表的一端开始查找，而是利用了二分查找的思路，先判断给定的索引处在链表的什么位置，如果索引小于数组元素的一半，就从头指针开始查找，反之则从尾部开始查找，这里也体现了双向链表结构的优势，既可以向前查找，又可以向后查找。到这里我们明白，基于双向循环链表实现的<code>LinkedList</code>，通过索引<code>Index</code>的操作时是低效的，<code>Index</code>所对应的元素越靠近中间所费时间越长。而向链表两端插入和删除元素则是非常高效的（如果不是两端的话，都需要对链表进行遍历查找）。</p>
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><p>对<code>LinkedList</code>遍历有以下几种方法：<code>Iterator</code>方式，<code>for</code>循环随机访问方式，<code>foreach</code>方式。对于这几种方式来说，效率最低下的是for循环随机访问的方式，为什么呢？因为在上一篇文章我们说到<code>ArrayList</code>实现了一个接口<code>RandomAccess</code>，此接口的主要目的是允许一般的算法更改其行为，从而在将其应用到随机或连续访问列表时能提供良好的性能。但是将操作随机访问列表的最佳算法（如 <code>ArrayList</code>）应用到连续访问列表（如 <code>LinkedList</code>）时，可产生二次项的行为。这是<code>jDK API</code>给出的解释，那通俗点讲是什么意思呢？我们知道<code>LinkedList</code>内部是使用双向链表实现的存储结构，一个链表节点除了存储元素本身外还存储了一个前驱几点的引用和后继节点的引用，注意这里存储的是引用，如果我需要查找第<code>n</code>个元素，不管是从链表头部开始查找还是从尾部开始查找，都需要先找到<code>n-1</code>或者<code>n+1</code>的元素，如果要找到<code>n-1</code>的数据那就要先找到<code>n-1-1</code>的数据，也就是说，需要把<code>n</code>之前或者之后的数据都访问一遍，才能访问到<code>n</code>。所以这样的方式是比较低效的，如果要遍历<code>LinkedList</code>，建议选择<code>Iterator</code>方式或者<code>foreach</code>方式。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>1、<code>LinkedList</code>基于双向链表结构实现存储，元素是有序的，并且元素可以为<code>null</code>、可以重复。<br>2、由于基于双向链表实现存储，增删比较快速，适用于频繁增删的场景。<br>3、查找比较耗时，遍历是需要注意，使用随机访问方式查找效率比较低下，需使用<code>Iterator</code>方式或者<code>foreach</code>方式遍历。<br>4、非线程安全，多线程环境慎用。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://www.jianshu.com/p/d5ec2ff72b33" target="_blank" rel="external">http://www.jianshu.com/p/d5ec2ff72b33</a><br><a href="http://www.blogjava.net/CarpenterLee/archive/2016/05/25/430333.html" target="_blank" rel="external">http://www.blogjava.net/CarpenterLee/archive/2016/05/25/430333.html</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/集合/" rel="tag"># 集合</a>
+          
+            <a href="/tags/LinkedList/" rel="tag"># LinkedList</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/07/java/Java集合框架之ArrayList详解/" rel="next" title="Java集合框架之ArrayList详解">
+                <i class="fa fa-chevron-left"></i> Java集合框架之ArrayList详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/09/java/Java集合框架之Set接口详解/" rel="prev" title="Java集合框架之Set接口详解">
+                Java集合框架之Set接口详解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDg1Mi83NDAx"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/12642715.jpg"
+               alt="kevin.yang" />
+          <p class="site-author-name" itemprop="name">kevin.yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/rss.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yanglukuan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LinkedList"><span class="nav-number">1.</span> <span class="nav-text">LinkedList</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据结构"><span class="nav-number">1.1.</span> <span class="nav-text">数据结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#构造"><span class="nav-number">1.2.</span> <span class="nav-text">构造</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#存取"><span class="nav-number">1.3.</span> <span class="nav-text">存取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遍历"><span class="nav-number">1.4.</span> <span class="nav-text">遍历</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">3.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kevin.yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

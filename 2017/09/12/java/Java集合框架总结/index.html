@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="tcGzXHmj_nXK7gGlZREm6t6k7bfrGt6HkfEZbGVZR_8" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Java,集合框架," />
+
+
+
+
+
+  <link rel="alternate" href="/rss.xml" title="kevin.yang" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="集合框架系列文章 Java集合框架之HashMap详解 Java集合框架之LinkedHashMap详解 Java集合框架之TreeMap详解 Java集合框架之ArrayList详解 Java集合框架之LinkedList详解 Java集合框架之Set接口详解   类图结构在前面的系列文章中，我们主要分析了java的集合框架。Java集合框架位于Java.util包下，包含了很多常用的数据结构，">
+<meta name="keywords" content="Java,集合框架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java集合框架总结">
+<meta property="og:url" content="https://yanglukuan.github.io/2017/09/12/java/Java集合框架总结/index.html">
+<meta property="og:site_name" content="kevin.yang">
+<meta property="og:description" content="集合框架系列文章 Java集合框架之HashMap详解 Java集合框架之LinkedHashMap详解 Java集合框架之TreeMap详解 Java集合框架之ArrayList详解 Java集合框架之LinkedList详解 Java集合框架之Set接口详解   类图结构在前面的系列文章中，我们主要分析了java的集合框架。Java集合框架位于Java.util包下，包含了很多常用的数据结构，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://yanglukuan.github.io/images/hashmap/javacollections.png">
+<meta property="og:image" content="https://yanglukuan.github.io/images/arrayList/Collections.png">
+<meta property="og:updated_time" content="2017-09-15T13:17:12.660Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java集合框架总结">
+<meta name="twitter:description" content="集合框架系列文章 Java集合框架之HashMap详解 Java集合框架之LinkedHashMap详解 Java集合框架之TreeMap详解 Java集合框架之ArrayList详解 Java集合框架之LinkedList详解 Java集合框架之Set接口详解   类图结构在前面的系列文章中，我们主要分析了java的集合框架。Java集合框架位于Java.util包下，包含了很多常用的数据结构，">
+<meta name="twitter:image" content="https://yanglukuan.github.io/images/hashmap/javacollections.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yanglukuan.github.io/2017/09/12/java/Java集合框架总结/"/>
+
+
+
+
+
+  <title>Java集合框架总结 | kevin.yang</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">kevin.yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">博闻强记</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yanglukuan.github.io/2017/09/12/java/Java集合框架总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="kevin.yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/12642715.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kevin.yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Java集合框架总结</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-12T13:30:47+08:00">
+                2017-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-eye"></i> 阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="集合框架"><a href="#集合框架" class="headerlink" title="集合框架"></a>集合框架</h2><h3 id="系列文章"><a href="#系列文章" class="headerlink" title="系列文章"></a>系列文章</h3><ul>
+<li><a href="/2017/08/31/java/HashMap详解/" title="Java集合框架之HashMap详解">Java集合框架之HashMap详解</a></li>
+<li><a href="/2017/09/05/java/Java集合框架之LinkedHashMap详解/" title="Java集合框架之LinkedHashMap详解">Java集合框架之LinkedHashMap详解</a></li>
+<li><a href="/2017/09/06/java/Java集合框架之TreeMap详解/" title="Java集合框架之TreeMap详解">Java集合框架之TreeMap详解</a></li>
+<li><a href="/2017/09/07/java/Java集合框架之ArrayList详解/" title="Java集合框架之ArrayList详解">Java集合框架之ArrayList详解</a></li>
+<li><a href="/2017/09/08/java/Java集合框架之LinkedList详解/" title="Java集合框架之LinkedList详解">Java集合框架之LinkedList详解</a></li>
+<li><a href="/2017/09/09/java/Java集合框架之Set接口详解/" title="Java集合框架之Set接口详解">Java集合框架之Set接口详解</a>
+</li>
+</ul>
+<h3 id="类图结构"><a href="#类图结构" class="headerlink" title="类图结构"></a>类图结构</h3><p>在前面的系列文章中，我们主要分析了java的集合框架。Java集合框架位于Java.util包下，包含了很多常用的数据结构，如数组、链表、栈、队列、集合、哈希表等，下面我们结合类图再来回顾一下。</p>
+<center><img src="/images/hashmap/javacollections.png" alt="Map接口类图"></center><center><strong><em>Map接口类图</em></strong></center><br><center><img src="/images/arrayList/Collections.png" alt="Collection接口类图"></center><center><strong><em>Collection接口类图</em></strong></center>
+
+<p><code>Java</code>的集合类主要由两个接口派生而出：<code>Collection</code>和<code>Map</code>，<code>Collection</code>和<code>Map</code>是<code>Java</code>集合框架的根接口，这两个接口又包含了一些接口或实现类。<code>Set</code>和<code>List</code>接口是<code>Collection</code>接口派生的两个子接口，<code>Queue</code>是<code>Java</code>提供的队列实现，类似于<code>List</code>。<code>Map</code>是一个映射接口，其中的每个元素都是一个<code>key-value</code>键值对，抽象类<code>AbstractMap</code>通过适配器模式实现了<code>Map</code>接口中的大部分函数，<code>TreeMap</code>、<code>HashMap</code>、<code>WeakHashMap</code>等实现类都通过继承<code>AbstractMap</code>来实现。另外，不常用的<code>HashTable</code>直接实现了<code>Map</code>接口。对于<code>Set</code>、<code>List</code>和<code>Map</code>三种集合，最常用的实现类分别是<code>HashSet</code>、<code>ArrayList</code>和<code>HashMap</code>三个实现类。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="Map-接口"><a href="#Map-接口" class="headerlink" title="Map 接口"></a>Map 接口</h3><p><code>Map</code>是一个映射接口，其中的每个元素都是一个<code>key-value</code>键值对，抽象类<code>AbstractMap</code>通过适配器模式实现了<code>Map</code>接口中的大部分函数，<code>HashMap</code>、<code>LinkedHashMap</code>、 <code>TreeMap</code>等实现类都通过继承<code>AbstractMap</code>实现。</p>
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><p><code>HashMap</code>采用了<code>hash</code>表数据结构来实现，其内部维护的数组+单链表+红黑树的结构实现了基于哈希表的存储结构。在<code>key</code>未发生冲突的情况下，搜索时间复杂度为<code>O(1)</code>，可以快速定位元素。存储时，根据<code>key</code>的哈希值决定元素存放的位置，采用链地址法解决<code>hash</code>冲突，当单链表长度超过<code>8</code>时，单链表转为红黑树。<br>1.<code>HashMap</code>是不保证存取的顺序性的，也就是说遍历<code>HashMap</code>的时候，得到的元素的顺序与添加元素的顺序是不同的。<br>2.<code>HashMap</code>的<code>key</code>不允许重复，至多允许一个<code>key</code>为<code>null</code>，任意<code>key</code>对应的<code>vlue</code>都可以为<code>null</code>。<br>3.<code>HashMap</code>不是线程安全的。<br>4.<code>HashMap</code>常被用作映射存储容器、简单缓存对象等。</p>
+<h4 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h4><p><code>LinkedHashMap</code>直接继承自<code>HashMap</code>，大部分常用的方法都是复用的<code>HashMap</code>的方法，重写了其中的某些方法，与<code>HashMap</code>最大的不同是<code>LinkedHashMap</code>保证了元素的顺序性，其内部使用双向链表结构实现。基于双向链表的数据结构使<code>LinkedHashMap</code>拥有了顺序访问元素的能力，但是由于维护了元素的顺序性，在插入元素时速度要比<code>HashMap</code>慢一些。<br>1.<code>LinkedHashMap</code>保证元素顺序性。<br>2.<code>LinkedHashMap</code>的<code>key</code>不允许重复，至多允许一个<code>key</code>为<code>null</code>，任意<code>key</code>对应的<code>vlue</code>都可以为<code>null</code>。<br>3.<code>LinkedHashMap</code>不是线程安全的。</p>
+<h4 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h4><p><code>TreeMap</code>继承自<code>AbstractMap</code>，并实现了<code>NavigableMap</code>接口，<code>AbstractMap</code>完成了大部分<code>map</code>接口所支持的方法，而<code>NavigableMap</code>接口继承自<code>SortedMap</code>接口，<code>SortedMap</code>存储的是有序的键值对。<code>TreeMap</code>内部使用红黑树结构实现元素存储，红黑树属于二叉排序树的一种，所以保证了<code>TreeMap</code>的有序性。红黑树三个重要的操作，左旋、右旋和着色，当<code>TreeMap</code>的元素发生变化时，为了维持红黑树的特性，需要针对性的对元素进行左旋、右旋和重新着色。<br>1.<code>TreeMap</code>保证元素顺序性。<br>2.不允许插入值为<code>null</code>的<code>key</code>。<br>3.可以插入值为<code>null</code>的<code>value</code>。<br>4.若<code>key</code>重复，则后面插入的直接覆盖原来的<code>value</code>。<br>5.非线程安全。</p>
+<h3 id="Collection-接口"><a href="#Collection-接口" class="headerlink" title="Collection 接口"></a>Collection 接口</h3><p><code>Collection</code>接口是<code>List</code>、<code>Set</code>等集合高度抽象出来的接口，它包含了这些集合的基本操作，主要又分为两大部分：<code>List</code>和<code>Set</code>。<code>List</code>接口通常表示一个列表（数组、队列、链表、栈等），其中的元素可以重复，常用实现类为<code>ArrayList</code>和<code>LinkedList</code>。</p>
+<h4 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h4><p><code>ArrayList</code>实现了 <code>List</code> 接口，其内部基于数组的数据结构实现，维护了一个<code>object</code>类型的动态数组。<code>object</code>数组长度默认<code>10</code>，超过这个长度就需要扩容。扩容机制是根据计算出来的新的容量重新实例化一个数组，并将原来数组的内容拷贝至新的数组。如果频繁扩容的话，比较浪费空间且容易引发性能问题。<br>1.基于数组实现，元素有序，元素可为<code>null</code>、可重复。<br>2.动态数组，容量不够时需要扩容，扩容基于数组拷贝，不适合用于频繁增删的场景，如果可以确定数据量大小，推荐使用固定的容量实例化。<br>3.非线程安全。</p>
+<h4 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h4><p><code>LinkedList</code>实现了<code>List</code>接口，并直接继承自<code>AbstractSequentialList</code>，<code>AbstractSequentialList</code>继承自<code>AbstractList</code>。<code>LinkedList</code>内部维护了一个双向链表的数据结构，<code>LinkedList</code>正是利用这个双向链表的数据结构实现了内部的元素存储，并通过维护一个头指针和尾指针，进行元素的增加和删除。<br>1.<code>LinkedList</code>基于双向链表结构实现存储，元素是有序的，并且元素可以为<code>null</code>、可以重复。<br>2.由于基于双向链表实现存储，增删比较快速，适用于频繁增删的场景。<br>3.查找比较耗时，遍历是需要注意，使用随机访问方式查找效率比较低下，需使用<code>Iterator</code>方式或者<code>foreach</code>方式遍历。<br>4.非线程安全，多线程环境慎用。</p>
+<h4 id="Set接口"><a href="#Set接口" class="headerlink" title="Set接口"></a>Set接口</h4><p>Set接口通常表示一个集合，其中的元素不允许重复，常用实现类有HashSet、LinkedHashSet和TreeSet。<br>1.对于<code>HashSet</code>而言，它是基于<code>HashMap</code>实现的，可以看作是对<code>HashMap</code>的封装，<code>HashSet</code>底层使用<code>HashMap</code>来保存所有元素，因此<code>HashSet</code>的实现比较简单，相关<code>HashSet</code>的操作，基本上都是直接调用底层<code>HashMap</code>的相关方法来完成。由于底层基于<code>HashMap</code>实现，内部使用基于哈希表的数组+链表方式存储，所以不保证元素的存取顺序。基于<code>key</code>的<code>hash</code>值存储，同样的对象<code>hash</code>值相同，所以元素不可重复，但是可以为<code>null</code>，可以快速查找是否包含某个元素。<br>2.<code>LinkedHashSet</code>继承自<code>HashSet</code>，内部是基于<code>LinkedHashMap</code>来实现的。<code>LinkedHashSet</code>底层使用<code>LinkedHashMap</code>来保存所有元素，其所有的方法操作上又与<code>HashSet</code>相同。底层存储基于<code>LinkedHashMap</code>实现，内部使用双向链表存储元素，所以保证了元素的顺序性。基于<code>key</code>的<code>hash</code>值存储，同样的对象<code>hash</code>值相同，所以元素不可重复，但是可以为<code>null</code>，可以快速查找是否包含某个元素。<br>3.<code>TreeSet</code>是基于<code>TreeMap</code>实现的有序集合，<code>TreeSet</code>中含有一个<code>NavigableMap</code>类型的成员变量<code>m</code>，而<code>m</code>实际上是<code>TreeMap</code>的实例。我们知道<code>TreeMap</code>内部是用红黑树实现元素存储从而保证元素的顺序性的，那么同理<code>TreeSet</code>同样也是一个有序的集合。底层存储基于<code>TreeMap</code>实现，内部使用红黑树结构表存储元素，所以保证了元素的顺序性。元素不可以为<code>null</code>。遍历时不支持随机访问，只能通过迭代器和<code>for-each</code>遍进行遍历。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Java/" rel="tag"># Java</a>
+          
+            <a href="/tags/集合框架/" rel="tag"># 集合框架</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/09/java/Java集合框架之Set接口详解/" rel="next" title="Java集合框架之Set接口详解">
+                <i class="fa fa-chevron-left"></i> Java集合框架之Set接口详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/22/java/springboot/springboot/" rel="prev" title="Spring Boot初探">
+                Spring Boot初探 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8zMDg1Mi83NDAx"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/12642715.jpg"
+               alt="kevin.yang" />
+          <p class="site-author-name" itemprop="name">kevin.yang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/rss.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/yanglukuan" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#集合框架"><span class="nav-number">1.</span> <span class="nav-text">集合框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#系列文章"><span class="nav-number">1.1.</span> <span class="nav-text">系列文章</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类图结构"><span class="nav-number">1.2.</span> <span class="nav-text">类图结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Map-接口"><span class="nav-number">2.1.</span> <span class="nav-text">Map 接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HashMap"><span class="nav-number">2.1.1.</span> <span class="nav-text">HashMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkedHashMap"><span class="nav-number">2.1.2.</span> <span class="nav-text">LinkedHashMap</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#TreeMap"><span class="nav-number">2.1.3.</span> <span class="nav-text">TreeMap</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Collection-接口"><span class="nav-number">2.2.</span> <span class="nav-text">Collection 接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ArrayList"><span class="nav-number">2.2.1.</span> <span class="nav-text">ArrayList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LinkedList"><span class="nav-number">2.2.2.</span> <span class="nav-text">LinkedList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Set接口"><span class="nav-number">2.2.3.</span> <span class="nav-text">Set接口</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kevin.yang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i> 访问人数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i> 总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
